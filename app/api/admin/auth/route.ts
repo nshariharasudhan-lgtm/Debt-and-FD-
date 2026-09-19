@@ -63,6 +63,36 @@ export async function POST(req: NextRequest) {
         );
       }
 
+      // Check if email is in recognized list or in public.admin_users table
+      let isAdminAuthorized = isRecognizedAdmin;
+
+      if (!isAdminAuthorized && supabaseAdmin) {
+        try {
+          const { data: dbAdmin } = await supabaseAdmin
+            .from('admin_users')
+            .select('*')
+            .eq('email', normalizedEmail)
+            .eq('is_active', true)
+            .maybeSingle();
+
+          if (dbAdmin) {
+            isAdminAuthorized = true;
+          }
+        } catch {
+          // Table might not be created yet, fallback to KNOWN_ADMIN_EMAILS
+        }
+      }
+
+      if (!isAdminAuthorized) {
+        return NextResponse.json(
+          { 
+            success: false, 
+            error: 'Unauthorized email address. Only registered administrators can access this console.' 
+          },
+          { status: 403 }
+        );
+      }
+
       // If Supabase is connected
       if (supabaseAdmin) {
         const { data: userList } = await supabaseAdmin.auth.admin.listUsers();
@@ -83,21 +113,28 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        // Check if admin is authorized
-        if (!authenticated && isRecognizedAdmin) {
-          // Allow recognized admin if password matches bootstrap credentials
-          const bootstrapPwd = process.env.ADMIN_INITIAL_PASSWORD || 'BharatAdmin@2025';
-          if (password === bootstrapPwd) {
-            authenticated = true;
-            if (!existingUser) {
-              const { data: created } = await supabaseAdmin.auth.admin.createUser({
-                email: normalizedEmail,
+        // Allow recognized admin if password matches bootstrap credentials
+        const bootstrapPwd = process.env.ADMIN_INITIAL_PASSWORD || 'BharatAdmin@2025';
+        if (!authenticated && password === bootstrapPwd) {
+          authenticated = true;
+          if (!existingUser) {
+            const { data: created } = await supabaseAdmin.auth.admin.createUser({
+              email: normalizedEmail,
+              password: password,
+              email_confirm: true,
+              app_metadata: { role: 'admin', is_admin: true },
+              user_metadata: { role: 'admin', name: 'YIELDNEST.ONLINE Admin', is_admin: true }
+            });
+            if (created?.user) existingUser = created.user;
+          } else {
+            // Synchronize password to Supabase Auth so standard logins also work
+            try {
+              await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
                 password: password,
-                email_confirm: true,
-                app_metadata: { role: 'admin', is_admin: true },
-                user_metadata: { role: 'admin', name: 'YIELDNEST.ONLINE Admin', is_admin: true }
+                email_confirm: true
               });
-              if (created?.user) existingUser = created.user;
+            } catch (syncErr) {
+              console.warn('Could not sync bootstrap password to Supabase:', syncErr);
             }
           }
         }
@@ -106,7 +143,7 @@ export async function POST(req: NextRequest) {
           return NextResponse.json(
             { 
               success: false, 
-              error: 'Invalid admin credentials. Please check your email and password.' 
+              error: 'Invalid password. Please use your Supabase account password or the setup password (BharatAdmin@2025).' 
             },
             { status: 401 }
           );
@@ -128,6 +165,20 @@ export async function POST(req: NextRequest) {
                 is_admin: true
               }
             });
+
+            // Update public.admin_users if table exists
+            try {
+              await supabaseAdmin
+                .from('admin_users')
+                .upsert({
+                  email: normalizedEmail,
+                  auth_user_id: existingUser.id,
+                  last_login_at: new Date().toISOString(),
+                  is_active: true
+                }, { onConflict: 'email' });
+            } catch {
+              // Table may not exist yet
+            }
           } catch (updateErr) {
             console.warn('Could not update role in Supabase:', updateErr);
           }
@@ -147,28 +198,26 @@ export async function POST(req: NextRequest) {
         });
       }
 
-      // Fallback if Supabase is offline
-      if (isRecognizedAdmin) {
-        const bootstrapPwd = process.env.ADMIN_INITIAL_PASSWORD || 'BharatAdmin@2025';
-        if (password === bootstrapPwd) {
-          return NextResponse.json({
-            success: true,
-            authenticated: true,
-            user: {
-              id: 'local-admin',
-              email: normalizedEmail,
-              role: 'admin',
-              roleDisplay: 'Master Administrator (Local Session)',
-              isSupabaseSynced: false
-            },
-            supabaseConnected: false
-          });
-        }
+      // Fallback if Supabase is offline but password matches bootstrap
+      const bootstrapPwd = process.env.ADMIN_INITIAL_PASSWORD || 'BharatAdmin@2025';
+      if (password === bootstrapPwd) {
+        return NextResponse.json({
+          success: true,
+          authenticated: true,
+          user: {
+            id: 'local-admin',
+            email: normalizedEmail,
+            role: 'admin',
+            roleDisplay: 'Master Administrator (Local Session)',
+            isSupabaseSynced: false
+          },
+          supabaseConnected: false
+        });
       }
 
       return NextResponse.json(
-        { success: false, error: 'Unauthorized user.' },
-        { status: 403 }
+        { success: false, error: 'Invalid password. Please use the initial setup password (BharatAdmin@2025).' },
+        { status: 401 }
       );
     }
 

@@ -43,6 +43,14 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
 
+  // First-time setup / Reset password mode on login card
+  const [isResetMode, setIsResetMode] = useState(false);
+  const [resetNewPwd, setResetNewPwd] = useState('');
+  const [resetConfirmPwd, setResetConfirmPwd] = useState('');
+  const [resetError, setResetError] = useState('');
+  const [resetSuccess, setResetSuccess] = useState('');
+  const [resetLoading, setResetLoading] = useState(false);
+
   // In-dashboard change password modal state
   const [inDashboardModalOpen, setInDashboardModalOpen] = useState(false);
   const [dashboardCurrentPwd, setDashboardCurrentPwd] = useState('');
@@ -138,6 +146,77 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
       console.error('Login error:', err);
       setLoginError(err.message || 'Connection error. Please try again.');
       setLoginLoading(false);
+    }
+  };
+
+  const handleResetSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setResetError('');
+    setResetSuccess('');
+
+    if (!emailInput.trim()) {
+      setResetError('Please enter your admin email address.');
+      return;
+    }
+
+    if (resetNewPwd.length < 6) {
+      setResetError('Password must be at least 6 characters long.');
+      return;
+    }
+
+    if (resetNewPwd !== resetConfirmPwd) {
+      setResetError('Passwords do not match.');
+      return;
+    }
+
+    setResetLoading(true);
+
+    try {
+      const res = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'set_password',
+          email: emailInput.trim(),
+          newPassword: resetNewPwd
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setResetError(data.error || 'Failed to update admin password.');
+        setResetLoading(false);
+        return;
+      }
+
+      setResetSuccess(data.message || 'Password successfully updated!');
+
+      // If user info returned, auto-log in
+      if (data.user) {
+        const verifiedEmail = data.user.email;
+        const verifiedRole = data.user.roleDisplay || 'Master Administrator';
+
+        sessionStorage.setItem('bharat_admin_session', JSON.stringify({
+          authenticated: true,
+          user: verifiedEmail,
+          role: verifiedRole,
+          loginTime: Date.now(),
+          supabaseSynced: true
+        }));
+
+        setTimeout(() => {
+          setActiveAdminEmail(verifiedEmail);
+          setAdminRole(verifiedRole);
+          setSupabaseConnected(true);
+          setIsAuthenticated(true);
+        }, 1200);
+      }
+      setResetLoading(false);
+    } catch (err: any) {
+      console.error('Reset password error:', err);
+      setResetError(err.message || 'Failed to connect. Please try again.');
+      setResetLoading(false);
     }
   };
 
@@ -267,14 +346,29 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
               </div>
             </div>
 
-            {loginError && (
+            {loginError && !isResetMode && (
               <div className="p-3.5 rounded-xl bg-red-950/70 border border-red-800 text-red-200 text-xs flex items-start gap-2.5">
                 <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
                 <span>{loginError}</span>
               </div>
             )}
 
-            <form onSubmit={handleLoginSubmit} className="space-y-4">
+            {resetError && isResetMode && (
+              <div className="p-3.5 rounded-xl bg-red-950/70 border border-red-800 text-red-200 text-xs flex items-start gap-2.5">
+                <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
+                <span>{resetError}</span>
+              </div>
+            )}
+
+            {resetSuccess && isResetMode && (
+              <div className="p-3.5 rounded-xl bg-emerald-950/70 border border-emerald-800 text-emerald-200 text-xs flex items-start gap-2.5">
+                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <span>{resetSuccess}</span>
+              </div>
+            )}
+
+            {!isResetMode ? (
+              <form onSubmit={handleLoginSubmit} className="space-y-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-300 mb-1.5">
                     Admin Email / User ID
@@ -317,6 +411,20 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
                       className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl pl-10 pr-3.5 py-2.5 text-xs font-mono focus:outline-none focus:border-blue-500 transition-colors"
                     />
                   </div>
+                  <div className="mt-1.5 flex items-center justify-between text-[11px]">
+                    <span className="text-slate-500">Initial Key: <code className="text-blue-400 font-mono">BharatAdmin@2025</code></span>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsResetMode(true);
+                        setResetError('');
+                        setResetSuccess('');
+                      }}
+                      className="text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
+                    >
+                      Set/Reset Password &rarr;
+                    </button>
+                  </div>
                 </div>
 
                 <button
@@ -334,6 +442,85 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
                   )}
                 </button>
               </form>
+            ) : (
+              <form onSubmit={handleResetSubmit} className="space-y-3.5">
+                <div className="p-2.5 rounded-lg bg-blue-950/40 border border-blue-800/50 text-[11px] text-blue-300">
+                  Authorized administrators can set or reset their account password directly here.
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    Admin Email
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={emailInput}
+                    onChange={(e) => setEmailInput(e.target.value)}
+                    placeholder="ns.hariharasudhan@gmail.com"
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    New Password (min 6 chars)
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    minLength={6}
+                    value={resetNewPwd}
+                    onChange={(e) => setResetNewPwd(e.target.value)}
+                    placeholder="Enter new password"
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1">
+                    Confirm New Password
+                  </label>
+                  <input
+                    type="password"
+                    required
+                    minLength={6}
+                    value={resetConfirmPwd}
+                    onChange={(e) => setResetConfirmPwd(e.target.value)}
+                    placeholder="Re-enter new password"
+                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3 py-2 text-xs font-mono focus:outline-none focus:border-blue-500"
+                  />
+                </div>
+
+                <div className="flex gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsResetMode(false);
+                      setResetError('');
+                      setResetSuccess('');
+                    }}
+                    className="w-1/3 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs rounded-xl transition-all cursor-pointer"
+                  >
+                    Back
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={resetLoading}
+                    className="w-2/3 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl transition-all shadow-lg flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-50"
+                  >
+                    {resetLoading ? (
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    ) : (
+                      <>
+                        <Key className="w-3.5 h-3.5" />
+                        <span>Update & Login</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            )}
 
             <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500">
               <span className="flex items-center gap-1">

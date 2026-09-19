@@ -1,5 +1,10 @@
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
+// Project Supabase defaults
+const FALLBACK_SUPABASE_URL = 'https://cmgqwpnuddynznmgjqsp.supabase.co';
+const FALLBACK_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtZ3F3cG51ZGR5bnpubWdqcXNwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkxMzk2MTIsImV4cCI6MjEwNDcxNTYxMn0.vtIUV7Q7RDKm89jeG8vCZyVMPxxzvhxN33HldhOc7uk';
+const FALLBACK_SERVICE_ROLE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNtZ3F3cG51ZGR5bnpubWdqcXNwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4OTEzOTYxMiwiZXhwIjoyMTA0NzE1NjEyfQ.NzxRCs38jnXl42TawAQJgCAglQG6bC8jtQPM3XQzVco';
+
 let supabaseClient: SupabaseClient | null = null;
 let supabaseAdminClient: SupabaseClient | null = null;
 
@@ -12,19 +17,20 @@ export function cleanSupabaseUrl(rawUrl?: string): string {
 }
 
 export function getCleanSupabaseUrl(): string {
-  return cleanSupabaseUrl(process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL);
+  const envUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+  return cleanSupabaseUrl(envUrl || FALLBACK_SUPABASE_URL);
 }
 
 /**
- * Returns a public anon client for Supabase, or null if keys are not configured.
+ * Returns a public anon client for Supabase.
  * Uses lazy initialization to prevent crashes when environment variables are missing.
  */
 export function getSupabaseClient(): SupabaseClient | null {
   if (supabaseClient) return supabaseClient;
 
-  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || FALLBACK_SUPABASE_URL;
   const url = cleanSupabaseUrl(rawUrl);
-  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || FALLBACK_ANON_KEY;
 
   if (!url || !anonKey || url.includes('your-project') || anonKey.includes('your-anon-key')) {
     return null;
@@ -47,9 +53,9 @@ export function getSupabaseClient(): SupabaseClient | null {
 export function getSupabaseAdminClient(): SupabaseClient | null {
   if (supabaseAdminClient) return supabaseAdminClient;
 
-  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL || FALLBACK_SUPABASE_URL;
   const url = cleanSupabaseUrl(rawUrl);
-  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || FALLBACK_SERVICE_ROLE_KEY;
 
   if (!url || !serviceKey || url.includes('your-project') || serviceKey.includes('your-')) {
     return null;
@@ -65,4 +71,3 @@ export function getSupabaseAdminClient(): SupabaseClient | null {
     return null;
   }
 }
-
