@@ -32,7 +32,47 @@ const nextConfig: NextConfig = {
       {
         source: '/guides',
         destination: '/guide',
-        permanent: false,
+        permanent: true,
+      },
+      {
+        source: '/directory',
+        destination: '/fd-rates',
+        permanent: true,
+      },
+      {
+        source: '/bank-directory',
+        destination: '/fd-rates',
+        permanent: true,
+      },
+      {
+        source: '/compare',
+        destination: '/compare-rates',
+        permanent: true,
+      },
+      {
+        source: '/pension',
+        destination: '/pension-planner',
+        permanent: true,
+      },
+      {
+        source: '/cashflow',
+        destination: '/pension-planner',
+        permanent: true,
+      },
+      {
+        source: '/tax',
+        destination: '/tax-rules-80ttb',
+        permanent: true,
+      },
+      {
+        source: '/80ttb',
+        destination: '/tax-rules-80ttb',
+        permanent: true,
+      },
+      {
+        source: '/tds',
+        destination: '/tax-rules-80ttb',
+        permanent: true,
       },
     ];
   },

@@ -65,6 +65,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-8TSJVS8X60" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-8TSJVS8X60');
+            `,
+          }}
+        />
+
         <link rel="alternate" type="application/json+tools" href="/api/mcp/tools" title="WebMCP Tool Registry" />
         <link rel="agent-manifest" href="/.well-known/agent.json" />
         <link rel="help" href="/llms.txt" title="LLMs Context Directory" />

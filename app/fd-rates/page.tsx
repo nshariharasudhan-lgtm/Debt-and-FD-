@@ -8,8 +8,10 @@ import {
   AlertTriangle, 
   ExternalLink,
   Award,
-  Layers
+  Layers,
+  Sparkles
 } from 'lucide-react';
+import { FdRatesClient } from './FdRatesClient';
 
 export const metadata: Metadata = {
   title: 'Top Bank Fixed Deposit (FD) Rates India 2026 | Up to 9.50% & DICGC Guide',
@@ -26,6 +28,19 @@ export const metadata: Metadata = {
 };
 
 export default function FdRatesPage() {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Table',
+    'about': 'Indian Bank Fixed Deposit Interest Rates 2026',
+    'name': 'Top Indian Bank FD Interest Rates Matrix',
+    'description': 'Comparison of interest rates for senior citizens and general public across Indian Scheduled Commercial Banks and Small Finance Banks.',
+    'publisher': {
+      '@type': 'Organization',
+      'name': 'YIELDNEST.ONLINE',
+      'url': 'https://yieldnest.online'
+    }
+  };
+
   const topBanks = [
     { name: 'Unity Small Finance Bank', category: 'Small Finance Bank (RBI Scheduled)', general: '9.00%', senior: '9.50%', tenure: '1001 Days', dicgc: true },
     { name: 'Suryoday Small Finance Bank', category: 'Small Finance Bank (RBI Scheduled)', general: '8.65%', senior: '9.15%', tenure: '2 Yrs 1 Day', dicgc: true },
@@ -39,8 +54,14 @@ export default function FdRatesPage() {
 
   return (
     <main className="min-h-screen bg-slate-50 text-slate-900 pb-16 font-sans w-full max-w-full overflow-x-hidden">
+      {/* Schema.org Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-2xs w-full">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex items-center justify-between">
           <Link 
             href="/"
             className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-blue-700 hover:text-blue-900 transition-colors"
@@ -48,14 +69,49 @@ export default function FdRatesPage() {
             <ArrowLeft className="w-4 h-4" />
             <span>Back to YIELDNEST.ONLINE Portal</span>
           </Link>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-bold">
-            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-            <span className="truncate">DICGC Insured ₹5L</span>
+          <div className="flex items-center gap-2">
+            <Link
+              href="/calculator"
+              className="text-xs font-semibold text-slate-600 hover:text-blue-700 hidden sm:inline"
+            >
+              ROI Calculator
+            </Link>
+            <span className="text-slate-300 hidden sm:inline">•</span>
+            <Link
+              href="/compare-rates"
+              className="text-xs font-semibold text-slate-600 hover:text-blue-700 hidden sm:inline"
+            >
+              Compare
+            </Link>
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-bold">
+              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+              <span className="truncate">DICGC Insured ₹5L</span>
+            </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 pt-8 space-y-8 w-full max-w-full overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-8 w-full max-w-full overflow-hidden">
+        {/* Interactive Directory Section */}
+        <section className="space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-100/80 text-blue-800 text-[11px] font-bold uppercase tracking-wider mb-1.5">
+                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                <span>Live Certified Directory</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl font-bold font-serif text-slate-900">
+                Bank &amp; Deposit Directory: Live Interest Rates
+              </h1>
+              <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                Filter by tenure, institution type, senior citizen rates, and search across scheduled commercial banks.
+              </p>
+            </div>
+          </div>
+
+          <FdRatesClient />
+        </section>
+
         {/* Front-loaded answer capsule */}
         <section 
           data-content-capsule="true"
@@ -66,9 +122,9 @@ export default function FdRatesPage() {
             <span>September 2026 Bank FD Rate Matrix</span>
           </div>
 
-          <h1 className="text-2xl sm:text-4xl font-bold font-serif text-slate-900 tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-bold font-serif text-slate-900 tracking-tight">
             Top Indian Bank Fixed Deposit Rates: Up to 9.50% with DICGC Insurance
-          </h1>
+          </h2>
 
           <p className="text-base sm:text-lg text-slate-700 leading-relaxed">
             Indian Scheduled Commercial Banks are currently offering between <strong>7.10% and 9.00%</strong> for general depositors and up to <strong>9.50%</strong> for senior citizens (aged 60+). All deposits in RBI Scheduled Banks—including Public Sector, Private, and Small Finance Banks—are protected up to <strong>₹5,00,000 per depositor</strong> under the Deposit Insurance and Credit Guarantee Corporation (DICGC) Act.
@@ -156,10 +212,10 @@ export default function FdRatesPage() {
           <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
             <span className="text-xs text-slate-500">Legal reference: DICGC Circular Ref. No. DICGC/DO/01/2020.</span>
             <Link 
-              href="/#comparator-section"
+              href="/calculator"
               className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 hover:text-blue-900"
             >
-              <span>Calculate Post-Tax Net Yield on Interactive Comparator &rarr;</span>
+              <span>Calculate Post-Tax Net Yield on Interactive Calculator &rarr;</span>
             </Link>
           </div>
         </section>

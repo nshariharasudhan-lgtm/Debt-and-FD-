@@ -22,6 +22,8 @@ import {
   HelpCircle,
   ChevronDown
 } from 'lucide-react';
+import { Form15HModal } from '@/components/Form15HModal';
+import { KnowYourTdsBadge } from '@/components/KnowYourTdsBadge';
 
 export interface InstrumentFaqItem {
   question: string;
@@ -156,6 +158,7 @@ export function InstrumentDirectory({
   const [viewMode, setViewMode] = useState<'cards' | 'table'>('cards');
   const [selectedInstrumentDetail, setSelectedInstrumentDetail] = useState<DebtInstrument | null>(null);
   const [expandedFaqCards, setExpandedFaqCards] = useState<Record<string, boolean>>({});
+  const [isForm15HModalOpen, setIsForm15HModalOpen] = useState<boolean>(false);
 
   const toggleCardFaq = (id: string) => {
     setExpandedFaqCards(prev => ({
@@ -405,6 +408,13 @@ export function InstrumentDirectory({
         </div>
       </div>
 
+      {/* Know Your TDS Explainer Banner */}
+      <KnowYourTdsBadge 
+        variant="banner" 
+        onOpenModal={() => setIsForm15HModalOpen(true)} 
+        isSenior={isSeniorCitizen} 
+      />
+
       {/* VIEW MODE 1: Table Sheet View (Senior Citizen Bank Ledger Style) */}
       {viewMode === 'table' && (
         <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs mb-6 w-full max-w-full">
@@ -464,9 +474,15 @@ export function InstrumentDirectory({
                     }`}
                     title="Click to sort by Senior Citizen Rate (60+)"
                   >
-                    <div className="flex items-center gap-1.5">
-                      <span>Senior Rate (60+)</span>
-                      {renderSortIcon('seniorCitizenRate', 'amber')}
+                    <div className="flex items-center justify-between gap-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <span>Senior Rate (60+)</span>
+                        {renderSortIcon('seniorCitizenRate', 'amber')}
+                      </div>
+                      <KnowYourTdsBadge 
+                        variant="table-header" 
+                        onOpenModal={() => setIsForm15HModalOpen(true)} 
+                      />
                     </div>
                   </th>
 
@@ -642,9 +658,16 @@ export function InstrumentDirectory({
                   }`}>
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div className="min-w-0">
-                        <span className="text-[11px] text-slate-600 block font-bold">
-                          {isSeniorCitizen ? 'Senior Citizen Rate (60+)' : 'General Public Rate'}
-                        </span>
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="text-[11px] text-slate-600 block font-bold">
+                            {isSeniorCitizen ? 'Senior Citizen Rate (60+)' : 'General Public Rate'}
+                          </span>
+                          <KnowYourTdsBadge 
+                            variant="card-chip" 
+                            onOpenModal={() => setIsForm15HModalOpen(true)} 
+                            isSenior={isSeniorCitizen} 
+                          />
+                        </div>
                         <div className="flex items-baseline gap-1 mt-0.5">
                           <span className={`${isLargeText ? 'text-3xl sm:text-4xl' : 'text-2xl sm:text-3xl'} font-extrabold font-mono tracking-tight ${
                             isSeniorCitizen ? 'text-amber-950' : 'text-blue-950'
@@ -844,7 +867,16 @@ export function InstrumentDirectory({
                     </span>
                   </div>
                   <div className="p-3 rounded-xl bg-slate-50 border border-slate-200">
-                    <span className="text-slate-500 block text-[10px] font-semibold">TDS Threshold Limit</span>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-500 block text-[10px] font-semibold">TDS Threshold Limit</span>
+                      <button
+                        type="button"
+                        onClick={() => setIsForm15HModalOpen(true)}
+                        className="text-[10px] font-bold text-blue-700 hover:text-blue-900 underline cursor-pointer"
+                      >
+                        Form 15H Guide
+                      </button>
+                    </div>
                     <span className="font-bold text-slate-800">
                       {selectedInstrumentDetail.tdsThreshold > 1000000 
                         ? 'Zero TDS (100% Tax-Free)' 
@@ -922,6 +954,12 @@ export function InstrumentDirectory({
           </div>
         </div>
       )}
+
+      {/* Form 15H Eligibility & Zero-TDS Modal */}
+      <Form15HModal 
+        isOpen={isForm15HModalOpen} 
+        onClose={() => setIsForm15HModalOpen(false)} 
+      />
     </section>
   );
 }
