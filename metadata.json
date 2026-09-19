@@ -1,0 +1,6 @@
+{
+  "name": "Indian Debt & Fixed Income Portal",
+  "description": "Comprehensive intelligence and yield analytics on Indian Fixed Deposits, Corporate Bonds, RBI Savings Bonds, SCSS, and G-Secs with tailored calculators for senior citizens and investors.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

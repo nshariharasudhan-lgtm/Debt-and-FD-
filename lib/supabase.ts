@@ -1,0 +1,68 @@
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
+
+let supabaseClient: SupabaseClient | null = null;
+let supabaseAdminClient: SupabaseClient | null = null;
+
+/**
+ * Sanitizes the Supabase URL by removing accidental path additions like /rest/v1 or trailing slashes
+ */
+export function cleanSupabaseUrl(rawUrl?: string): string {
+  if (!rawUrl) return '';
+  return rawUrl.trim().replace(/\/rest\/v1\/?$/i, '').replace(/\/+$/, '');
+}
+
+export function getCleanSupabaseUrl(): string {
+  return cleanSupabaseUrl(process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL);
+}
+
+/**
+ * Returns a public anon client for Supabase, or null if keys are not configured.
+ * Uses lazy initialization to prevent crashes when environment variables are missing.
+ */
+export function getSupabaseClient(): SupabaseClient | null {
+  if (supabaseClient) return supabaseClient;
+
+  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+  const url = cleanSupabaseUrl(rawUrl);
+  const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+
+  if (!url || !anonKey || url.includes('your-project') || anonKey.includes('your-anon-key')) {
+    return null;
+  }
+
+  try {
+    supabaseClient = createClient(url, anonKey, {
+      auth: { persistSession: false }
+    });
+    return supabaseClient;
+  } catch (error) {
+    console.warn('Failed to initialize Supabase public client:', error);
+    return null;
+  }
+}
+
+/**
+ * Returns a server-side admin client using the service role key for backend operations.
+ */
+export function getSupabaseAdminClient(): SupabaseClient | null {
+  if (supabaseAdminClient) return supabaseAdminClient;
+
+  const rawUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || process.env.SUPABASE_URL;
+  const url = cleanSupabaseUrl(rawUrl);
+  const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+  if (!url || !serviceKey || url.includes('your-project') || serviceKey.includes('your-')) {
+    return null;
+  }
+
+  try {
+    supabaseAdminClient = createClient(url, serviceKey, {
+      auth: { persistSession: false }
+    });
+    return supabaseAdminClient;
+  } catch (error) {
+    console.warn('Failed to initialize Supabase admin client:', error);
+    return null;
+  }
+}
+

@@ -1,0 +1,36 @@
+# BharatFixed - Indian Debt & Fixed Income Portal
+> Real-time intelligence, yield comparison, and tax analytics on Indian Fixed Deposits, Sovereign Bonds (SCSS, RBI Floating Rate), and Corporate Debt for retail & senior citizen investors.
+
+## Overview
+BharatFixed provides verified financial intelligence on fixed-income instruments in India. Rates are verified against RBI Master Directions, Deposit Insurance and Credit Guarantee Corporation (DICGC) schedules, and Ministry of Finance gazette notifications for Q2 FY 2026-27.
+
+## Key Pages & Services
+- [Fixed Income Directory](https://bharatfixed.in/#directory-section): Filter 25+ bank FDs, sovereign schemes, and corporate bonds by tenure, yield, and safety.
+- [Post-Tax Yield Comparator](https://bharatfixed.in/#comparator-section): Calculate actual post-tax return across 0%, 5%, 10%, 15%, 20%, and 30% tax brackets.
+- [Senior Citizen Analytics (60+)](https://bharatfixed.in/#senior-analytics-section): Section 80TTB tax deduction modeling (up to ₹50,000 tax-free) and Form 15H eligibility checker.
+- [Retirement Cashflow Planner](https://bharatfixed.in/#planner-section): Monthly interest laddering across DICGC-insured scheduled banks.
+- [Statutory Tax & Regulatory Guides](https://bharatfixed.in/#seo-guides-section): Detailed guides on Section 80TTB, DICGC ₹5 Lakh coverage, Form 15H/15G, and Sovereign vs Corporate risk.
+- [Author & Research Methodology](https://bharatfixed.in/#author-methodology): Editorial governance, verification methodology, and author credentials.
+
+## Current Benchmark Rates (Verified September 2026)
+- SCSS (Senior Citizen Savings Scheme): 8.20% per annum (Quarterly payout, Govt of India sovereign guarantee, 5-year tenure).
+- RBI Floating Rate Savings Bonds (FRSB 2020): 8.05% per annum (Linked to NSC + 35 bps, semi-annual reset).
+- Top Small Finance Bank Senior FD (Unity SFB): Up to 9.50% (1001-day special tenure, DICGC insured up to ₹5 Lakhs).
+- Top Public Sector Bank Senior FD (SBI Amrit Kalash): 7.60% (444-day special tenure, DICGC insured).
+- Top Private Bank Senior FD (HDFC / ICICI): 7.75% (DICGC insured).
+- Top AAA Corporate FD (Bajaj Finance / Shriram): 8.85% (CRISIL AAA / ICRA AA+ rated; note: corporate FDs lack DICGC insurance).
+
+## Key Statutory Regulations & Tax Sections
+- Section 80TTB (Income Tax Act 1961): Allows resident senior citizens (60+) a deduction of up to ₹50,000 per financial year on interest income from bank and post office deposits.
+- Section 194A (TDS on Interest): TDS threshold is ₹50,000 for senior citizens and ₹40,000 for general depositors across bank branches.
+- Form 15H: Self-declaration submitted by resident senior citizens with estimated nil taxable income to ensure zero TDS is deducted.
+- DICGC Insurance: Up to ₹5,00,000 (Rupees Five Lakhs) covering principal and accrued interest per depositor per scheduled bank under the DICGC Act 1961.
+
+## Agentic WebMCP Tools API
+AI agents can programmatically invoke calculations and filter products:
+- Tool Registry Endpoint: https://bharatfixed.in/api/mcp/tools
+- Discovery Manifest: https://bharatfixed.in/.well-known/agent.json
+- Callable Tools: `search_debt_instruments`, `calculate_fd_yield`, `get_statutory_rates`
+
+## Full Documentation
+For complete data tables and methodology: [llms-full.txt](https://bharatfixed.in/llms-full.txt)

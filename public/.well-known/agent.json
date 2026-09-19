@@ -1,0 +1,20 @@
+{
+  "schema_version": "2026-01",
+  "name": "BharatFixed Agent Tool Registry",
+  "url": "https://bharatfixed.in",
+  "description": "Autonomous financial intelligence tool endpoint for querying verified Indian fixed income products, calculating senior citizen yields, and validating RBI/DICGC regulatory coverage.",
+  "provider": {
+    "name": "BharatFixed",
+    "website": "https://bharatfixed.in"
+  },
+  "capabilities": [
+    "debt_instrument_search",
+    "fixed_deposit_yield_calculation",
+    "senior_citizen_tax_optimization",
+    "statutory_rate_verification"
+  ],
+  "tools_endpoint": "https://bharatfixed.in/api/mcp/tools",
+  "llms_txt": "https://bharatfixed.in/llms.txt",
+  "sitemap": "https://bharatfixed.in/sitemap.xml",
+  "contact": "analyst@bharatfixed.in"
+}

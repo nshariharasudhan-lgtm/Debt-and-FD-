@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Ensure smooth touch scrolling within isolated horizontal scroll containers */
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
+}
