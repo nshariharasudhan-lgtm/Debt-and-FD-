@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { calculateDebtReturns, formatINR, formatCompactINR } from '@/lib/debt-calculations';
 import { DebtInstrument } from '@/lib/debt-data';
 import { 
@@ -44,25 +44,27 @@ export function SeniorCitizenAnalytics({
   const [hasForm15H, setHasForm15H] = useState<boolean>(true);
   const [instrumentType, setInstrumentType] = useState<'bank_fd' | 'corporate_fd' | 'rbi_govt' | 'ncd_bond'>('bank_fd');
   const [showMethodology, setShowMethodology] = useState<boolean>(false);
-  const [prevInstrument, setPrevInstrument] = useState<DebtInstrument | null>(null);
 
   // Sync with selected instrument when passed from directory
-  if (selectedInstrument && selectedInstrument !== prevInstrument) {
-    setPrevInstrument(selectedInstrument);
-    setInterestRate(isSeniorCitizen ? selectedInstrument.seniorCitizenRate : selectedInstrument.generalRate);
-    setInstrumentType(selectedInstrument.type);
-    if (selectedInstrument.type === 'rbi_govt' && selectedInstrument.id === 'scss-govt') {
-      setTenureYears(5);
-      setPayoutMode('quarterly');
-    } else if (selectedInstrument.payoutFrequency.includes('cumulative')) {
-      setPayoutMode('cumulative');
-    } else if (selectedInstrument.payoutFrequency.includes('monthly')) {
-      setPayoutMode('monthly');
+  useEffect(() => {
+    if (selectedInstrument) {
+      queueMicrotask(() => {
+        setInterestRate(isSeniorCitizen ? selectedInstrument.seniorCitizenRate : selectedInstrument.generalRate);
+        setInstrumentType(selectedInstrument.type);
+        if (selectedInstrument.type === 'rbi_govt' && selectedInstrument.id === 'scss-govt') {
+          setTenureYears(5);
+          setPayoutMode('quarterly');
+        } else if (selectedInstrument.payoutFrequency.includes('cumulative')) {
+          setPayoutMode('cumulative');
+        } else if (selectedInstrument.payoutFrequency.includes('monthly')) {
+          setPayoutMode('monthly');
+        }
+        if (selectedInstrument.minInvestment) {
+          setPrincipal(prev => Math.max(prev, selectedInstrument.minInvestment || 0));
+        }
+      });
     }
-    if (selectedInstrument.minInvestment && principal < selectedInstrument.minInvestment) {
-      setPrincipal(selectedInstrument.minInvestment);
-    }
-  }
+  }, [selectedInstrument, isSeniorCitizen]);
 
   // Toggle senior citizen mode
   const handleSeniorToggle = (senior: boolean) => {
@@ -74,8 +76,8 @@ export function SeniorCitizenAnalytics({
     }
   };
 
-  // Perform calculations
-  const calcResult = calculateDebtReturns({
+  // Perform calculations (memoized to prevent performance bottlenecks)
+  const calcResult = useMemo(() => calculateDebtReturns({
     principal,
     tenureYears,
     interestRate,
@@ -85,7 +87,7 @@ export function SeniorCitizenAnalytics({
     inflationRate,
     instrumentType,
     hasSubmitted15H: hasForm15H
-  });
+  }), [principal, tenureYears, interestRate, isSeniorCitizen, payoutMode, taxBracket, inflationRate, instrumentType, hasForm15H]);
 
   return (
     <section id="analytics-calculator-section" className="scroll-mt-24 py-4 space-y-6">

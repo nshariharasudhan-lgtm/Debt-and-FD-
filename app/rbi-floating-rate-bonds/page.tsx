@@ -15,12 +15,12 @@ export const metadata: Metadata = {
   title: 'RBI Floating Rate Savings Bonds (FRSB 2020) | 8.05% Yield & Reset Rules',
   description: 'Complete guide to RBI Floating Rate Savings Bonds (FRSB 2020). 8.05% current coupon rate, NSC spread formula, semi-annual payout, and senior citizen liquidity rules.',
   alternates: {
-    canonical: 'https://bharatfixed.in/rbi-floating-rate-bonds',
+    canonical: 'https://yieldnest.online/rbi-floating-rate-bonds',
   },
   openGraph: {
     title: 'RBI Floating Rate Savings Bonds (FRSB 2020) | 8.05% Yield & Reset Rules',
     description: '8.05% current coupon rate, NSC spread formula, semi-annual payout, and senior citizen liquidity rules.',
-    url: 'https://bharatfixed.in/rbi-floating-rate-bonds',
+    url: 'https://yieldnest.online/rbi-floating-rate-bonds',
     type: 'article',
   },
 };
@@ -35,7 +35,7 @@ export default function RbiBondsPage() {
             className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-blue-700 hover:text-blue-900 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to BharatFixed Portal</span>
+            <span>Back to YIELDNEST.ONLINE Portal</span>
           </Link>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-900 text-xs font-bold">
             <ShieldCheck className="w-3.5 h-3.5 text-blue-600" />

@@ -15,12 +15,12 @@ export const metadata: Metadata = {
   title: 'Top Bank Fixed Deposit (FD) Rates India 2026 | Up to 9.50% & DICGC Guide',
   description: 'Verified interest rate tables for Indian Public Sector Banks, Private Banks, and Small Finance Banks. DICGC ₹5 Lakh deposit insurance rules and laddering strategy.',
   alternates: {
-    canonical: 'https://bharatfixed.in/fd-rates',
+    canonical: 'https://yieldnest.online/fd-rates',
   },
   openGraph: {
     title: 'Top Bank Fixed Deposit (FD) Rates India 2026 | Up to 9.50% & DICGC Guide',
     description: 'Verified interest rate tables for Indian Public Sector Banks, Private Banks, and Small Finance Banks.',
-    url: 'https://bharatfixed.in/fd-rates',
+    url: 'https://yieldnest.online/fd-rates',
     type: 'article',
   },
 };
@@ -46,7 +46,7 @@ export default function FdRatesPage() {
             className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-blue-700 hover:text-blue-900 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to BharatFixed Portal</span>
+            <span>Back to YIELDNEST.ONLINE Portal</span>
           </Link>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-900 text-xs font-bold">
             <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />

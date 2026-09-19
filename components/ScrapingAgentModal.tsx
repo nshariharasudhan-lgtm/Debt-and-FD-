@@ -330,7 +330,7 @@ export function ScrapingAgentModal({ isOpen, onClose, onApplyRatesToPortal }: Sc
           {activeTab === 'terminal' && (
             <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 font-mono text-xs text-slate-300 space-y-1.5 max-h-[380px] overflow-y-auto">
               <div className="text-slate-400 pb-2 border-b border-slate-800 text-[11px]">
-                # BharatFixed AI Agent Execution Stream &bull; Session {new Date().toISOString().slice(0, 10)}
+                # YIELDNEST.ONLINE AI Agent Execution Stream &bull; Session {new Date().toISOString().slice(0, 10)}
               </div>
               {logs.length === 0 ? (
                 <div className="text-slate-400 italic py-4">No logs yet. Press &ldquo;Run Agent Scraper&rdquo; to start.</div>

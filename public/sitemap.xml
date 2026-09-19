@@ -1,51 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://bharatfixed.in/</loc>
-    <lastmod>2026-09-12T00:00:00+00:00</lastmod>
+    <loc>https://yieldnest.online/</loc>
+    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://bharatfixed.in/senior-citizen-savings-scheme</loc>
-    <lastmod>2026-09-12T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://bharatfixed.in/fd-rates</loc>
-    <lastmod>2026-09-12T00:00:00+00:00</lastmod>
+    <loc>https://yieldnest.online/calculator</loc>
+    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.9</priority>
+    <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://bharatfixed.in/rbi-floating-rate-bonds</loc>
-    <lastmod>2026-09-12T00:00:00+00:00</lastmod>
+    <loc>https://yieldnest.online/pension-planner</loc>
+    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://yieldnest.online/compare-rates</loc>
+    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://yieldnest.online/tax-rules-80ttb</loc>
+    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://yieldnest.online/fd-rates</loc>
+    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
+    <loc>https://yieldnest.online/senior-citizen-savings-scheme</loc>
+    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
+  </url>
+  <url>
+    <loc>https://yieldnest.online/rbi-floating-rate-bonds</loc>
+    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.85</priority>
   </url>
   <url>
-    <loc>https://bharatfixed.in/guide</loc>
-    <lastmod>2026-09-12T00:00:00+00:00</lastmod>
+    <loc>https://yieldnest.online/guide</loc>
+    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
-    <priority>0.9</priority>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://bharatfixed.in/guide/bank-fd-vs-corporate-fd-safety-tax-comparison</loc>
-    <lastmod>2026-09-12T00:00:00+00:00</lastmod>
+    <loc>https://yieldnest.online/guide/bank-fd-vs-corporate-fd-safety-tax-comparison</loc>
+    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://bharatfixed.in/guide/section-80ttb-income-tax-benefits-senior-citizens</loc>
-    <lastmod>2026-09-12T00:00:00+00:00</lastmod>
+    <loc>https://yieldnest.online/guide/section-80ttb-income-tax-benefits-senior-citizens</loc>
+    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
   <url>
-    <loc>https://bharatfixed.in/guide/dicgc-deposit-insurance-protection-rules-india</loc>
-    <lastmod>2026-09-12T00:00:00+00:00</lastmod>
+    <loc>https://yieldnest.online/guide/dicgc-deposit-insurance-protection-rules-india</loc>
+    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.80</priority>
   </url>
 </urlset>

@@ -279,9 +279,9 @@ export function MasterArticlesCMS({ onArticleCountChange }: MasterArticlesCMSPro
       category,
       excerpt: excerpt.trim() || content.slice(0, 160).replace(/[#*`>|]/g, '').trim(),
       content: content.trim(),
-      canonicalUrl: `https://bharatfixed.in/guide/${cleanSlug}`,
+      canonicalUrl: `https://yieldnest.online/guide/${cleanSlug}`,
       author: {
-        name: authorName.trim() || 'BharatFixed Editorial Desk',
+        name: authorName.trim() || 'YIELDNEST.ONLINE Editorial Desk',
         role: authorRole.trim() || 'Research Analyst',
         credentials: authorCredentials.trim() || 'CFP®, CFA'
       },
@@ -725,7 +725,7 @@ export function MasterArticlesCMS({ onArticleCountChange }: MasterArticlesCMSPro
                     type="text"
                     value={metaTitle}
                     onChange={e => setMetaTitle(e.target.value)}
-                    placeholder="e.g. Section 80TTB Tax Exemption Guide (FY 2025-26) | BharatFixed"
+                    placeholder="e.g. Section 80TTB Tax Exemption Guide (FY 2025-26) | YIELDNEST.ONLINE"
                     className="w-full px-3.5 py-2 text-xs rounded-xl border border-slate-300 text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-600 bg-slate-50/50 font-medium"
                   />
                 </div>
@@ -978,9 +978,9 @@ export function MasterArticlesCMS({ onArticleCountChange }: MasterArticlesCMSPro
                 <div className={`p-4 rounded-xl border border-slate-200 bg-white space-y-1.5 ${serpDevice === 'mobile' ? 'max-w-[280px] mx-auto text-xs' : ''}`}>
                   <div className="flex items-center gap-1.5 text-[11px] text-slate-600 truncate">
                     <div className="w-3.5 h-3.5 rounded-full bg-blue-700 text-white text-[8px] flex items-center justify-center font-bold">
-                      B
+                      Y
                     </div>
-                    <span className="font-medium text-slate-800">bharatfixed.in</span>
+                    <span className="font-medium text-slate-800">yieldnest.online</span>
                     <span className="text-slate-400">&gt; guide &gt; {slug || 'guide-slug'}</span>
                   </div>
 

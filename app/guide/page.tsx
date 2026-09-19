@@ -113,8 +113,8 @@ export default function GuideBlogPage() {
   }, [filteredArticles, featuredArticle]);
 
   const breadcrumbJsonLd = generateBreadcrumbJsonLd([
-    { name: 'Home', url: 'https://bharatfixed.in' },
-    { name: 'Investor Guides & Blog', url: 'https://bharatfixed.in/guide' }
+    { name: 'Home', url: 'https://yieldnest.online' },
+    { name: 'Investor Guides & Blog', url: 'https://yieldnest.online/guide' }
   ]);
 
   return (
@@ -141,7 +141,7 @@ export default function GuideBlogPage() {
           <div className="max-w-3xl space-y-4 relative z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs font-bold uppercase tracking-wider">
               <BookOpen className="w-3.5 h-3.5 text-blue-400" />
-              <span>BharatFixed Editorial &amp; Knowledge Hub</span>
+              <span>YIELDNEST.ONLINE Editorial &amp; Knowledge Hub</span>
             </div>
             
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight font-serif text-white">

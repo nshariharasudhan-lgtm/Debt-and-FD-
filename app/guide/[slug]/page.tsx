@@ -30,17 +30,17 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       .join(' ');
 
     return {
-      title: `${cleanTitle} | BharatFixed Guide`,
+      title: `${cleanTitle} | YIELDNEST.ONLINE Guide`,
       description: `Comprehensive financial guide on ${cleanTitle} for Indian depositors and senior citizens.`,
       alternates: {
-        canonical: `https://bharatfixed.in/guide/${slug}`,
+        canonical: `https://yieldnest.online/guide/${slug}`,
       },
     };
   }
 
-  const pageTitle = `${article.metaTitle || article.title} | BharatFixed`;
+  const pageTitle = `${article.metaTitle || article.title} | YIELDNEST.ONLINE`;
   const pageDescription = article.metaDescription || article.excerpt;
-  const canonicalUrl = article.canonicalUrl || `https://bharatfixed.in/guide/${article.slug}`;
+  const canonicalUrl = article.canonicalUrl || `https://yieldnest.online/guide/${article.slug}`;
 
   return {
     title: pageTitle,
@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       ...(article.secondaryKeywords || []),
       'Fixed Deposit India',
       'Senior Citizen Savings',
-      'BharatFixed'
+      'YIELDNEST.ONLINE'
     ],
     authors: [{ name: article.author?.name || 'Venkatesh Ramanathan' }],
     alternates: {
@@ -60,7 +60,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       title: article.metaTitle || article.title,
       description: pageDescription,
       url: canonicalUrl,
-      siteName: 'BharatFixed Debt Portal',
+      siteName: 'YIELDNEST.ONLINE Debt Portal',
       locale: 'en_IN',
       type: 'article',
       publishedTime: article.publishedDate,
@@ -99,9 +99,9 @@ export default async function GuideArticlePage({ params }: PageProps) {
       secondaryKeywords: [],
       category: 'Bank FDs & DICGC',
       excerpt: `Detailed investor guide covering ${formattedTitle}.`,
-      content: `## Overview of ${formattedTitle}\n\nLoading live article content from BharatFixed editorial registry...`,
+      content: `## Overview of ${formattedTitle}\n\nLoading live article content from YIELDNEST.ONLINE editorial registry...`,
       author: {
-        name: 'BharatFixed Editorial Desk',
+        name: 'YIELDNEST.ONLINE Editorial Desk',
         role: 'Research Desk',
         credentials: 'CFP®, CFA'
       },

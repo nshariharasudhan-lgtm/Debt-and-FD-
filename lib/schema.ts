@@ -1,5 +1,5 @@
 /**
- * Schema.org JSON-LD Structured Data for BharatFixed
+ * Schema.org JSON-LD Structured Data for YIELDNEST.ONLINE
  * Covers: Organization, Person (Author), FinancialService, WebSite, FAQPage, Article
  */
 export const SITE_STRUCTURED_DATA = {
@@ -7,13 +7,13 @@ export const SITE_STRUCTURED_DATA = {
   '@graph': [
     {
       '@type': 'Organization',
-      '@id': 'https://bharatfixed.in/#organization',
-      name: 'BharatFixed',
+      '@id': 'https://yieldnest.online/#organization',
+      name: 'YIELDNEST.ONLINE',
       alternateName: 'Indian Debt & Fixed Income Intelligence Portal',
-      url: 'https://bharatfixed.in',
+      url: 'https://yieldnest.online',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://bharatfixed.in/assets/bharatfixed-logo.png',
+        url: 'https://yieldnest.online/logo.png',
         width: '512',
         height: '512'
       },
@@ -26,18 +26,18 @@ export const SITE_STRUCTURED_DATA = {
       contactPoint: {
         '@type': 'ContactPoint',
         contactType: 'editorial & research inquiries',
-        email: 'analyst@bharatfixed.in',
+        email: 'analyst@yieldnest.online',
         areaServed: 'IN',
         availableLanguage: ['en', 'hi']
       }
     },
     {
       '@type': 'Person',
-      '@id': 'https://bharatfixed.in/#author',
+      '@id': 'https://yieldnest.online/#author',
       name: 'Venkatesh Ramanathan, CFP®, CFA',
       jobTitle: 'Lead Fixed Income Research Analyst & Retirement Wealth Specialist',
       worksFor: {
-        '@id': 'https://bharatfixed.in/#organization'
+        '@id': 'https://yieldnest.online/#organization'
       },
       description: 'Senior financial analyst with 14+ years covering RBI monetary policy, sovereign bond yield curves, and retirement fixed-income planning in India. Certified Financial Planner (CFP®) and CFA Charterholder.',
       knowsAbout: [
@@ -50,27 +50,27 @@ export const SITE_STRUCTURED_DATA = {
       ],
       sameAs: [
         'https://www.linkedin.com',
-        'https://bharatfixed.in/#author-methodology'
+        'https://yieldnest.online/#author-methodology'
       ]
     },
     {
       '@type': 'WebSite',
-      '@id': 'https://bharatfixed.in/#website',
-      url: 'https://bharatfixed.in',
-      name: 'BharatFixed',
+      '@id': 'https://yieldnest.online/#website',
+      url: 'https://yieldnest.online',
+      name: 'YIELDNEST.ONLINE',
       publisher: {
-        '@id': 'https://bharatfixed.in/#organization'
+        '@id': 'https://yieldnest.online/#organization'
       },
       inLanguage: 'en-IN'
     },
     {
       '@type': 'FinancialService',
-      '@id': 'https://bharatfixed.in/#service',
-      name: 'BharatFixed Debt Yield & Retirement Analytics',
-      url: 'https://bharatfixed.in',
+      '@id': 'https://yieldnest.online/#service',
+      name: 'YIELDNEST.ONLINE Debt Yield & Retirement Analytics',
+      url: 'https://yieldnest.online',
       serviceType: 'Fixed Income Comparison & Tax Optimization Service',
       provider: {
-        '@id': 'https://bharatfixed.in/#organization'
+        '@id': 'https://yieldnest.online/#organization'
       },
       areaServed: 'IN',
       hasOfferCatalog: {
@@ -110,26 +110,26 @@ export const SITE_STRUCTURED_DATA = {
     },
     {
       '@type': 'Article',
-      '@id': 'https://bharatfixed.in/#article',
+      '@id': 'https://yieldnest.online/#article',
       isPartOf: {
-        '@id': 'https://bharatfixed.in/#website'
+        '@id': 'https://yieldnest.online/#website'
       },
       headline: 'Indian Bank Fixed Deposit Rates, SCSS & Sovereign Debt Yield Analysis (September 2026)',
       description: 'Comprehensive analysis of interest rates across 25+ Indian Scheduled Banks, SCSS 8.20%, and RBI Floating Rate Bonds with Section 80TTB tax deduction modeling.',
       inLanguage: 'en-IN',
-      mainEntityOfPage: 'https://bharatfixed.in',
+      mainEntityOfPage: 'https://yieldnest.online',
       datePublished: '2026-01-15T08:00:00+05:30',
       dateModified: '2026-09-12T09:00:00+05:30',
       author: {
-        '@id': 'https://bharatfixed.in/#author'
+        '@id': 'https://yieldnest.online/#author'
       },
       publisher: {
-        '@id': 'https://bharatfixed.in/#organization'
+        '@id': 'https://yieldnest.online/#organization'
       }
     },
     {
       '@type': 'FAQPage',
-      '@id': 'https://bharatfixed.in/#faq',
+      '@id': 'https://yieldnest.online/#faq',
       mainEntity: [
         {
           '@type': 'Question',

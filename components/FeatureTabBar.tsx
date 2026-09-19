@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { 
   Building2, 
   Calculator, 
@@ -9,7 +10,8 @@ import {
   BookOpen, 
   LayoutGrid,
   Sparkles,
-  ChevronRight
+  ChevronRight,
+  ExternalLink
 } from 'lucide-react';
 
 export type FeatureTabKey = 'directory' | 'calculator' | 'pension' | 'compare' | 'guides' | 'all';
@@ -32,6 +34,7 @@ export function FeatureTabBar({
     badgeColor?: string;
     icon: React.ComponentType<{ className?: string }>;
     description: string;
+    url?: string;
   }[] = [
     {
       id: 'directory',
@@ -39,7 +42,8 @@ export function FeatureTabBar({
       badge: 'Live Rates',
       badgeColor: 'bg-blue-100 text-blue-800 border-blue-200',
       icon: Building2,
-      description: 'Compare interest rates across scheduled commercial banks, small finance banks & sovereign bonds'
+      description: 'Compare interest rates across scheduled commercial banks, small finance banks & sovereign bonds',
+      url: '/fd-rates'
     },
     {
       id: 'calculator',
@@ -47,7 +51,8 @@ export function FeatureTabBar({
       badge: 'Sec 80TTB',
       badgeColor: 'bg-amber-100 text-amber-900 border-amber-300',
       icon: Calculator,
-      description: 'Simulate compounding returns, inflation-adjusted purchasing power, and ₹50,000 senior tax savings'
+      description: 'Simulate compounding returns, inflation-adjusted purchasing power, and ₹50,000 senior tax savings',
+      url: '/calculator'
     },
     {
       id: 'pension',
@@ -55,13 +60,15 @@ export function FeatureTabBar({
       badge: 'Monthly Pension',
       badgeColor: 'bg-emerald-100 text-emerald-900 border-emerald-300',
       icon: Calendar,
-      description: 'Plan steady monthly interest inflows using SCSS, RBI Floating Rate Bonds, and fixed deposits'
+      description: 'Plan steady monthly interest inflows using SCSS, RBI Floating Rate Bonds, and fixed deposits',
+      url: '/pension-planner'
     },
     {
       id: 'compare',
       label: 'Compare Rates',
       icon: Scale,
-      description: 'Side-by-side comparison of risk, credit ratings, DICGC insurance, and net returns'
+      description: 'Side-by-side comparison of risk, credit ratings, DICGC insurance, and net returns',
+      url: '/compare-rates'
     },
     {
       id: 'guides',
@@ -69,7 +76,8 @@ export function FeatureTabBar({
       badge: 'DICGC & 15H',
       badgeColor: 'bg-slate-200 text-slate-800 border-slate-300',
       icon: BookOpen,
-      description: 'Learn statutory ₹5 Lakh insurance limits, TDS rules, and Form 15H submission guidelines'
+      description: 'Learn statutory ₹5 Lakh insurance limits, TDS rules, and Form 15H submission guidelines',
+      url: '/tax-rules-80ttb'
     },
     {
       id: 'all',
@@ -92,20 +100,32 @@ export function FeatureTabBar({
           </span>
           <span className="text-slate-300">|</span>
           <span className="text-xs text-slate-600 font-medium hidden md:inline">
-            Click any button below to view that dedicated tool
+            Switch tools in place or open separate indexable URLs
           </span>
         </div>
 
-        {activeTab !== 'all' && (
-          <button
-            onClick={() => onSelectTab('all')}
-            id="tab-view-all-shortcut-btn"
-            className="text-xs font-bold text-blue-700 hover:text-blue-800 flex items-center gap-1 cursor-pointer hover:underline"
-          >
-            <span>View All on One Page</span>
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          {currentTabInfo.url && (
+            <Link
+              href={currentTabInfo.url}
+              className="text-xs font-bold text-blue-700 hover:text-blue-800 inline-flex items-center gap-1 hover:underline"
+            >
+              <span>Open Dedicated Page</span>
+              <ExternalLink className="w-3 h-3" />
+            </Link>
+          )}
+
+          {activeTab !== 'all' && (
+            <button
+              onClick={() => onSelectTab('all')}
+              id="tab-view-all-shortcut-btn"
+              className="text-xs font-bold text-slate-600 hover:text-slate-900 flex items-center gap-1 cursor-pointer hover:underline"
+            >
+              <span>View All</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Responsive Horizontal Tab Buttons */}
@@ -160,8 +180,19 @@ export function FeatureTabBar({
             <span className="font-bold text-slate-900">Current View:</span>
             <span className="text-slate-700">{currentTabInfo.description}</span>
           </div>
-          <div className="text-[11px] text-slate-500 font-medium">
-            Tab {tabs.findIndex(t => t.id === activeTab) + 1} of {tabs.length - 1}
+          <div className="flex items-center gap-3">
+            {currentTabInfo.url && (
+              <Link
+                href={currentTabInfo.url}
+                className="text-blue-600 hover:text-blue-800 font-semibold inline-flex items-center gap-1 hover:underline"
+              >
+                <span>Indexable URL: {currentTabInfo.url}</span>
+                <ExternalLink className="w-3 h-3" />
+              </Link>
+            )}
+            <div className="text-[11px] text-slate-500 font-medium">
+              Tab {tabs.findIndex(t => t.id === activeTab) + 1} of {tabs.length - 1}
+            </div>
           </div>
         </div>
       )}

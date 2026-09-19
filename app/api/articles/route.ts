@@ -61,7 +61,7 @@ export async function POST(req: NextRequest) {
       title: article.title.trim(),
       metaTitle: article.metaTitle?.trim() || article.title.trim(),
       metaDescription: article.metaDescription?.trim() || article.excerpt?.trim() || '',
-      canonicalUrl: article.canonicalUrl || `https://bharatfixed.in/guide/${cleanSlug}`,
+      canonicalUrl: article.canonicalUrl || `https://yieldnest.online/guide/${cleanSlug}`,
       primaryKeyword: article.primaryKeyword?.trim() || 'Fixed Deposit',
       secondaryKeywords: Array.isArray(article.secondaryKeywords) ? article.secondaryKeywords : [],
       category: article.category || 'Bank FDs & DICGC',

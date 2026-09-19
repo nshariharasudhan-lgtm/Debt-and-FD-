@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { YieldNestLogo } from './YieldNestLogo';
 import { 
   Lock, 
   Key, 
@@ -18,10 +19,6 @@ import {
   Database
 } from 'lucide-react';
 
-const DEFAULT_ADMIN_EMAIL = 'harihns.0306@gmail.com';
-const SECONDARY_ADMIN_EMAIL = 'ns.hariharasudhan@gmail.com';
-const INITIAL_DUMMY_PASSWORD = 'BharatAdmin@2025';
-
 interface AdminAuthGateProps {
   children: (authProps: {
     adminEmail: string;
@@ -35,26 +32,16 @@ interface AdminAuthGateProps {
 export function AdminAuthGate({ children }: AdminAuthGateProps) {
   const [isClientReady, setIsClientReady] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [mustChangePassword, setMustChangePassword] = useState(false);
-  const [activeAdminEmail, setActiveAdminEmail] = useState(DEFAULT_ADMIN_EMAIL);
+  const [activeAdminEmail, setActiveAdminEmail] = useState('');
   const [adminRole, setAdminRole] = useState('Administrator');
   const [supabaseConnected, setSupabaseConnected] = useState(true);
 
   // Login form state
-  const [emailInput, setEmailInput] = useState(DEFAULT_ADMIN_EMAIL);
+  const [emailInput, setEmailInput] = useState('');
   const [passwordInput, setPasswordInput] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loginError, setLoginError] = useState('');
   const [loginLoading, setLoginLoading] = useState(false);
-
-  // First-time change password modal/screen state
-  const [currentPasswordInput, setCurrentPasswordInput] = useState('');
-  const [newPasswordInput, setNewPasswordInput] = useState('');
-  const [confirmPasswordInput, setConfirmPasswordInput] = useState('');
-  const [showNewPassword, setShowNewPassword] = useState(false);
-  const [passwordChangeError, setPasswordChangeError] = useState('');
-  const [passwordChangeSuccess, setPasswordChangeSuccess] = useState('');
-  const [passwordChangeLoading, setPasswordChangeLoading] = useState(false);
 
   // In-dashboard change password modal state
   const [inDashboardModalOpen, setInDashboardModalOpen] = useState(false);
@@ -68,7 +55,8 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
   // Hydrate auth data on client mount and check Supabase health
   useEffect(() => {
     let isMounted = true;
-    const timer = setTimeout(async () => {
+    queueMicrotask(() => {
+      if (!isMounted) return;
       try {
         // Check active session in storage
         const activeSession = sessionStorage.getItem('bharat_admin_session');
@@ -78,26 +66,29 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
             setActiveAdminEmail(session.user);
             setAdminRole(session.role || 'Administrator');
             setIsAuthenticated(true);
-            setMustChangePassword(Boolean(session.mustChangePassword));
           }
         }
-
-        // Ping Supabase server check
-        const res = await fetch('/api/admin/auth');
-        const data = await res.json();
-        if (isMounted && data.connected) {
-          setSupabaseConnected(true);
-        }
       } catch (e) {
-        console.error('Failed to parse admin session or check Supabase', e);
+        console.error('Failed to parse admin session', e);
       } finally {
         if (isMounted) setIsClientReady(true);
       }
-    }, 0);
+    });
+
+    // Check Supabase connection in background
+    fetch('/api/admin/auth')
+      .then(res => res.json())
+      .then(data => {
+        if (isMounted && data.connected) {
+          setSupabaseConnected(true);
+        }
+      })
+      .catch(() => {
+        if (isMounted) setSupabaseConnected(false);
+      });
 
     return () => {
       isMounted = false;
-      clearTimeout(timer);
     };
   }, []);
 
@@ -129,13 +120,11 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
       // Login success: user role is updated as Admin in Supabase
       const verifiedEmail = data.user.email;
       const verifiedRole = data.user.roleDisplay || 'Master Administrator';
-      const needsPwdChange = Boolean(data.mustChangePassword);
 
       sessionStorage.setItem('bharat_admin_session', JSON.stringify({
         authenticated: true,
         user: verifiedEmail,
         role: verifiedRole,
-        mustChangePassword: needsPwdChange,
         loginTime: Date.now(),
         supabaseSynced: Boolean(data.supabaseConnected)
       }));
@@ -144,12 +133,7 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
       setAdminRole(verifiedRole);
       setSupabaseConnected(Boolean(data.supabaseConnected));
       setIsAuthenticated(true);
-      setMustChangePassword(needsPwdChange);
       setLoginLoading(false);
-
-      if (needsPwdChange) {
-        setCurrentPasswordInput(passwordInput);
-      }
     } catch (err: any) {
       console.error('Login error:', err);
       setLoginError(err.message || 'Connection error. Please try again.');
@@ -157,73 +141,12 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
     }
   };
 
-  const handleFirstTimePasswordChange = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setPasswordChangeError('');
-
-    if (newPasswordInput.length < 6) {
-      setPasswordChangeError('New password must be at least 6 characters long.');
-      return;
-    }
-
-    if (newPasswordInput === INITIAL_DUMMY_PASSWORD) {
-      setPasswordChangeError('Your new password cannot be the same as the initial dummy password.');
-      return;
-    }
-
-    if (newPasswordInput !== confirmPasswordInput) {
-      setPasswordChangeError('New password and confirmation do not match.');
-      return;
-    }
-
-    setPasswordChangeLoading(true);
-
-    try {
-      const res = await fetch('/api/admin/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'change_password',
-          email: activeAdminEmail,
-          currentPassword: currentPasswordInput,
-          newPassword: newPasswordInput
-        })
-      });
-
-      const data = await res.json();
-
-      if (!res.ok || !data.success) {
-        setPasswordChangeError(data.error || 'Failed to update password in Supabase.');
-        setPasswordChangeLoading(false);
-        return;
-      }
-
-      // Update session
-      const activeSession = sessionStorage.getItem('bharat_admin_session');
-      if (activeSession) {
-        const session = JSON.parse(activeSession);
-        session.mustChangePassword = false;
-        sessionStorage.setItem('bharat_admin_session', JSON.stringify(session));
-      }
-
-      setPasswordChangeSuccess('Password successfully updated and Admin role confirmed in Supabase! Unlocking dashboard...');
-      setTimeout(() => {
-        setMustChangePassword(false);
-        setPasswordChangeSuccess('');
-        setPasswordChangeLoading(false);
-      }, 1200);
-    } catch (err: any) {
-      setPasswordChangeError(err.message || 'Network error updating password.');
-      setPasswordChangeLoading(false);
-    }
-  };
-
   const handleDashboardPasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     setDashboardError('');
 
-    if (dashboardNewPwd.length < 6) {
-      setDashboardError('New password must be at least 6 characters long.');
+    if (dashboardNewPwd.length < 8) {
+      setDashboardError('New password must be at least 8 characters long.');
       return;
     }
 
@@ -249,12 +172,12 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
       const data = await res.json();
 
       if (!res.ok || !data.success) {
-        setDashboardError(data.error || 'Could not update password in Supabase.');
+        setDashboardError(data.error || 'Could not update password.');
         setDashboardLoading(false);
         return;
       }
 
-      setDashboardSuccess('Password changed and confirmed in Supabase!');
+      setDashboardSuccess('Password updated successfully!');
       setTimeout(() => {
         setInDashboardModalOpen(false);
         setDashboardSuccess('');
@@ -276,6 +199,7 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
       console.error(e);
     }
     setIsAuthenticated(false);
+    setActiveAdminEmail('');
     setPasswordInput('');
     setLoginError('');
   };
@@ -289,131 +213,7 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
     );
   }
 
-  // 1. Mandatory First-Time Password Change screen
-  if (isAuthenticated && mustChangePassword) {
-    return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 font-sans selection:bg-blue-600 selection:text-white">
-        <div className="w-full max-w-md bg-slate-900/95 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl backdrop-blur-md space-y-6">
-          
-          <div className="text-center space-y-2">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400 shadow-inner">
-              <Key className="w-6 h-6" />
-            </div>
-            <h1 className="text-xl font-bold font-serif text-white tracking-tight">
-              Security Setup: Choose Private Password
-            </h1>
-            <p className="text-xs text-slate-400">
-              Authenticated as <strong className="text-blue-300">{activeAdminEmail}</strong> with <span className="text-emerald-400 font-semibold font-mono">Role: Admin</span>.
-            </p>
-          </div>
-
-          <div className="p-3 rounded-xl bg-slate-800/80 border border-slate-700 text-xs flex items-center gap-2">
-            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-            <span className="text-slate-300">
-              Your role has been registered as <strong className="text-white font-semibold">Admin</strong> in Supabase Auth. Please set your private password to finalize dashboard access.
-            </span>
-          </div>
-
-          {passwordChangeError && (
-            <div className="p-3.5 rounded-xl bg-red-900/40 border border-red-700/60 text-red-200 text-xs flex items-start gap-2.5">
-              <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
-              <span>{passwordChangeError}</span>
-            </div>
-          )}
-
-          {passwordChangeSuccess && (
-            <div className="p-3.5 rounded-xl bg-emerald-900/40 border border-emerald-700/60 text-emerald-200 text-xs flex items-center gap-2.5">
-              <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-              <span>{passwordChangeSuccess}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleFirstTimePasswordChange} className="space-y-4">
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Current Temporary Password
-              </label>
-              <input
-                type="password"
-                required
-                value={currentPasswordInput}
-                onChange={(e) => setCurrentPasswordInput(e.target.value)}
-                placeholder="Initial dummy password"
-                className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3.5 py-2.5 text-xs font-mono focus:outline-none focus:border-blue-500 transition-colors"
-              />
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-semibold text-slate-300">
-                  New Private Password
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="text-[11px] text-slate-400 hover:text-slate-200 flex items-center gap-1 cursor-pointer"
-                >
-                  {showNewPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-                  <span>{showNewPassword ? 'Hide' : 'Show'}</span>
-                </button>
-              </div>
-              <input
-                type={showNewPassword ? 'text' : 'password'}
-                required
-                minLength={6}
-                value={newPasswordInput}
-                onChange={(e) => setNewPasswordInput(e.target.value)}
-                placeholder="Min 6 characters (e.g. MySecret@2025)"
-                className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3.5 py-2.5 text-xs font-mono focus:outline-none focus:border-blue-500 transition-colors"
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                Confirm New Password
-              </label>
-              <input
-                type={showNewPassword ? 'text' : 'password'}
-                required
-                minLength={6}
-                value={confirmPasswordInput}
-                onChange={(e) => setConfirmPasswordInput(e.target.value)}
-                placeholder="Re-enter new password"
-                className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl px-3.5 py-2.5 text-xs font-mono focus:outline-none focus:border-blue-500 transition-colors"
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={passwordChangeLoading}
-              className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl transition-all shadow-lg active:scale-98 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-            >
-              {passwordChangeLoading ? (
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              ) : (
-                <>
-                  <ShieldCheck className="w-4 h-4" />
-                  <span>Save Password & Enter Dashboard</span>
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className="pt-2 border-t border-slate-800 text-center">
-            <button
-              onClick={handleSignOut}
-              className="text-xs text-slate-400 hover:text-slate-200 inline-flex items-center gap-1.5 transition-colors cursor-pointer"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              <span>Cancel & Sign Out</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // 2. Unauthenticated Login Gate
+  // Unauthenticated Login Gate
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 font-sans selection:bg-blue-600 selection:text-white">
@@ -435,12 +235,12 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
 
           {/* Login Card */}
           <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">
-            <div className="text-center space-y-2">
-              <div className="w-12 h-12 rounded-2xl bg-blue-500/10 border border-blue-500/30 flex items-center justify-center mx-auto text-blue-400 shadow-inner">
-                <Lock className="w-6 h-6" />
+            <div className="text-center space-y-3">
+              <div id="admin-logo-placeholder" className="inline-flex items-center justify-center p-5 rounded-2xl bg-white/95 shadow-lg w-72 sm:w-84 md:w-96 max-w-full">
+                <YieldNestLogo variant="full" height={84} className="w-full h-auto" />
               </div>
-              <h1 className="text-2xl font-bold font-serif text-white tracking-tight">
-                BharatFixed <span className="text-blue-400">Admin Console</span>
+              <h1 className="text-xl font-bold font-serif text-white tracking-tight">
+                YIELDNEST.ONLINE <span className="text-blue-400">Admin Console</span>
               </h1>
               <p className="text-xs text-slate-400">
                 Secured via Supabase Authentication & Role Verification
@@ -467,33 +267,6 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
               </div>
             </div>
 
-            {/* Allowed Admin IDs quick pick */}
-            <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 text-xs space-y-1.5">
-              <span className="text-[11px] text-slate-400 font-semibold block">Configured Admin Accounts:</span>
-              <div className="flex flex-col gap-1">
-                <button
-                  type="button"
-                  onClick={() => setEmailInput(DEFAULT_ADMIN_EMAIL)}
-                  className="text-left font-mono text-[11px] text-blue-400 hover:text-blue-300 hover:underline flex items-center justify-between"
-                >
-                  <span>{DEFAULT_ADMIN_EMAIL}</span>
-                  <span className="text-[10px] text-slate-500">Default</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setEmailInput(SECONDARY_ADMIN_EMAIL)}
-                  className="text-left font-mono text-[11px] text-blue-400 hover:text-blue-300 hover:underline flex items-center justify-between"
-                >
-                  <span>{SECONDARY_ADMIN_EMAIL}</span>
-                  <span className="text-[10px] text-slate-500">Verified</span>
-                </button>
-              </div>
-              <div className="pt-1.5 border-t border-slate-800 text-[10px] text-slate-400 flex items-center justify-between">
-                <span>Initial Dummy Password:</span>
-                <code className="text-amber-300 font-mono">{INITIAL_DUMMY_PASSWORD}</code>
-              </div>
-            </div>
-
             {loginError && (
               <div className="p-3.5 rounded-xl bg-red-950/70 border border-red-800 text-red-200 text-xs flex items-start gap-2.5">
                 <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
@@ -502,65 +275,65 @@ export function AdminAuthGate({ children }: AdminAuthGateProps) {
             )}
 
             <form onSubmit={handleLoginSubmit} className="space-y-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-                  Admin Email / User ID
-                </label>
-                <div className="relative">
-                  <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type="email"
-                    required
-                    value={emailInput}
-                    onChange={(e) => setEmailInput(e.target.value)}
-                    placeholder="admin@example.com"
-                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl pl-10 pr-3.5 py-2.5 text-xs font-mono focus:outline-none focus:border-blue-500 transition-colors"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-semibold text-slate-300">
-                    Password
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 mb-1.5">
+                    Admin Email / User ID
                   </label>
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="text-[11px] text-slate-400 hover:text-slate-200 flex items-center gap-1 cursor-pointer"
-                  >
-                    {showPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
-                    <span>{showPassword ? 'Hide' : 'Show'}</span>
-                  </button>
+                  <div className="relative">
+                    <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type="email"
+                      required
+                      value={emailInput}
+                      onChange={(e) => setEmailInput(e.target.value)}
+                      placeholder="admin@example.com"
+                      className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl pl-10 pr-3.5 py-2.5 text-xs font-mono focus:outline-none focus:border-blue-500 transition-colors"
+                    />
+                  </div>
                 </div>
-                <div className="relative">
-                  <Key className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                  <input
-                    type={showPassword ? 'text' : 'password'}
-                    required
-                    value={passwordInput}
-                    onChange={(e) => setPasswordInput(e.target.value)}
-                    placeholder="Enter password"
-                    className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl pl-10 pr-3.5 py-2.5 text-xs font-mono focus:outline-none focus:border-blue-500 transition-colors"
-                  />
-                </div>
-              </div>
 
-              <button
-                type="submit"
-                disabled={loginLoading}
-                className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl transition-all shadow-lg active:scale-98 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
-              >
-                {loginLoading ? (
-                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                ) : (
-                  <>
-                    <Lock className="w-4 h-4" />
-                    <span>Login & Confirm Admin Role</span>
-                  </>
-                )}
-              </button>
-            </form>
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block text-xs font-semibold text-slate-300">
+                      Password
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="text-[11px] text-slate-400 hover:text-slate-200 flex items-center gap-1 cursor-pointer"
+                    >
+                      {showPassword ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                      <span>{showPassword ? 'Hide' : 'Show'}</span>
+                    </button>
+                  </div>
+                  <div className="relative">
+                    <Key className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                    <input
+                      type={showPassword ? 'text' : 'password'}
+                      required
+                      value={passwordInput}
+                      onChange={(e) => setPasswordInput(e.target.value)}
+                      placeholder="Enter password"
+                      className="w-full bg-slate-950 border border-slate-800 text-slate-100 rounded-xl pl-10 pr-3.5 py-2.5 text-xs font-mono focus:outline-none focus:border-blue-500 transition-colors"
+                    />
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={loginLoading}
+                  className="w-full py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-xl transition-all shadow-lg active:scale-98 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                >
+                  {loginLoading ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <>
+                      <Lock className="w-4 h-4" />
+                      <span>Login & Confirm Admin Role</span>
+                    </>
+                  )}
+                </button>
+              </form>
 
             <div className="pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-500">
               <span className="flex items-center gap-1">

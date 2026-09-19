@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { DebtInstrument } from '@/lib/debt-data';
 import { calculateDebtReturns, formatINR } from '@/lib/debt-calculations';
 import { ShieldCheck, ArrowRight, Award, Check, X, Scale } from 'lucide-react';
@@ -23,9 +23,29 @@ export function YieldComparator({ instruments, isSeniorCitizen }: YieldComparato
   const [mobileActiveIndex, setMobileActiveIndex] = useState<number>(0);
   const [mobileDisplayMode, setMobileDisplayMode] = useState<'cards' | 'table'>('cards');
 
-  const selectedInstruments = selectedIds
-    .map(id => instruments.find(inst => inst.id === id))
-    .filter(Boolean) as DebtInstrument[];
+  const selectedInstruments = useMemo(() => {
+    return selectedIds
+      .map(id => instruments.find(inst => inst.id === id))
+      .filter(Boolean) as DebtInstrument[];
+  }, [selectedIds, instruments]);
+
+  const simResults = useMemo(() => {
+    const results: Record<string, ReturnType<typeof calculateDebtReturns>> = {};
+    for (const inst of selectedInstruments) {
+      results[inst.id] = calculateDebtReturns({
+        principal: compareAmount,
+        tenureYears: compareTenure,
+        interestRate: isSeniorCitizen ? inst.seniorCitizenRate : inst.generalRate,
+        isSeniorCitizen,
+        payoutMode: inst.payoutFrequency.includes('cumulative') ? 'cumulative' : 'quarterly',
+        taxBracket: 0.10,
+        inflationRate: 5.10,
+        instrumentType: inst.type,
+        hasSubmitted15H: true
+      });
+    }
+    return results;
+  }, [selectedInstruments, compareAmount, compareTenure, isSeniorCitizen]);
 
   const handleSelectInstrument = (index: number, newId: string) => {
     setSelectedIds(prev => {
@@ -124,7 +144,7 @@ export function YieldComparator({ instruments, isSeniorCitizen }: YieldComparato
             const inst = selectedInstruments[mobileActiveIndex];
             const rate = isSeniorCitizen ? inst.seniorCitizenRate : inst.generalRate;
             const eligible80ttb = inst.type === 'bank_fd' || inst.id === 'scss-govt' || inst.id === 'pomis-postoffice';
-            const simResult = calculateDebtReturns({
+            const simResult = simResults[inst.id] || calculateDebtReturns({
               principal: compareAmount,
               tenureYears: compareTenure,
               interestRate: isSeniorCitizen ? inst.seniorCitizenRate : inst.generalRate,
@@ -375,17 +395,8 @@ export function YieldComparator({ instruments, isSeniorCitizen }: YieldComparato
                     Est. 5-Yr Earnings on {formatINR(compareAmount)}
                   </td>
                   {selectedInstruments.map(inst => {
-                    const result = calculateDebtReturns({
-                      principal: compareAmount,
-                      tenureYears: compareTenure,
-                      interestRate: isSeniorCitizen ? inst.seniorCitizenRate : inst.generalRate,
-                      isSeniorCitizen,
-                      payoutMode: inst.payoutFrequency.includes('cumulative') ? 'cumulative' : 'quarterly',
-                      taxBracket: 0.10,
-                      inflationRate: 5.10,
-                      instrumentType: inst.type,
-                      hasSubmitted15H: true
-                    });
+                    const result = simResults[inst.id];
+                    if (!result) return null;
 
                     return (
                       <td key={inst.id} className="py-3 px-4">

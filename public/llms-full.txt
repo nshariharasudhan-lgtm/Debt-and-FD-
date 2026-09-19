@@ -1,7 +1,18 @@
-# BharatFixed - Complete Fixed Income & Debt Intelligence Database (Full Context)
-Last Verified: 2026-09-12 | Scope: Indian Debt Markets & Retirement Instruments
+# YIELDNEST.ONLINE - Complete Fixed Income & Debt Intelligence Database (Full Context)
+Last Verified: 2026-09-19 | Scope: Indian Debt Markets & Retirement Instruments
 
-## 1. Statutory Foundations & Regulatory References
+## 1. Dedicated Canonical URLs & Pages
+- Homepage & Live Portal: https://yieldnest.online/
+- Bank FD Rates Directory: https://yieldnest.online/fd-rates
+- FD ROI & Tax Calculator: https://yieldnest.online/calculator
+- Retirement Cashflow Planner: https://yieldnest.online/pension-planner
+- Multi-Asset Yield Comparator: https://yieldnest.online/compare-rates
+- DICGC & Section 80TTB Tax Handbook: https://yieldnest.online/tax-rules-80ttb
+- Senior Citizen Savings Scheme (SCSS): https://yieldnest.online/senior-citizen-savings-scheme
+- RBI Floating Rate Bonds (FRSB): https://yieldnest.online/rbi-floating-rate-bonds
+- Knowledge Base & Blog: https://yieldnest.online/guide
+
+## 2. Statutory Foundations & Regulatory References
 - Reserve Bank of India (RBI): Master Direction – Reserve Bank of India (Interest Rate on Deposits) Directions, 2016 (Updated for FY 2026-27).
 - Deposit Insurance and Credit Guarantee Corporation (DICGC): Section 16(1) of the DICGC Act, 1961. Limit: ₹5,00,000 per depositor per insured bank (both principal and interest in same right and capacity).
 - Income Tax Act, 1961:
@@ -12,7 +23,7 @@ Last Verified: 2026-09-12 | Scope: Indian Debt Markets & Retirement Instruments
   - Section 10(15)(iv)(h): Complete tax exemption for interest on notified tax-free bonds (e.g. NHAI, REC, PFC).
   - Section 54EC: Capital gains tax exemption on long-term capital assets invested in notified bonds (REC, PFC, IRFC) up to ₹50 Lakhs.
 
-## 2. Verified Benchmark Rates (September 2026)
+## 3. Verified Benchmark Rates (September 2026)
 | Instrument | Issuer Category | General Rate (%) | Senior Rate (%) | Tenure | Insurance / Rating | Tax Treatment |
 |---|---|---|---|---|---|---|
 | Senior Citizen Savings Scheme (SCSS) | Ministry of Finance / Sovereign | N/A | 8.20% | 5 Years | Sovereign (Zero Default Risk) | Sec 80C deposit deduction; interest eligible for Sec 80TTB |
@@ -28,9 +39,9 @@ Last Verified: 2026-09-12 | Scope: Indian Debt Markets & Retirement Instruments
 | NHAI 7.60% Tax-Free Bonds | Public Sector Undertaking (PSU) | 5.35% (YTM) | 5.35% (YTM) | Mat. 2032 | CRISIL AAA (Secondary Market) | 100% Tax-Free under Sec 10(15)(iv)(h) |
 | REC 54EC Capital Gains Bonds | Public Sector Undertaking (PSU) | 5.25% | 5.25% | 5 Years | CRISIL AAA / ICRA AAA | Sec 54EC capital gains relief; coupon taxable |
 
-## 3. WebMCP Tools Integration
+## 4. WebMCP Tools Integration
 Endpoints:
-- POST https://bharatfixed.in/api/mcp/tools
+- POST https://yieldnest.online/api/mcp/tools
   Parameters: `tool`, `params`
   Examples:
   - `{ "tool": "search_debt_instruments", "params": { "is_senior_citizen": true, "min_rate": 8.0 } }`

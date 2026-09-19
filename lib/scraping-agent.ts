@@ -1047,7 +1047,7 @@ export async function runScrapingAgent(
 
   const allTargets = [...defaultScrapeTargets, ...customTargets];
 
-  addLog('CONNECT', 'info', `Initialized BharatFixed Scraping Engine. Selected ${targetIds.length} financial institutions across PSU, Private, SFBs, and Corporate NBFCs (including ${customTargets.length} custom user endpoints).`);
+  addLog('CONNECT', 'info', `Initialized YIELDNEST.ONLINE Scraping Engine. Selected ${targetIds.length} financial institutions across PSU, Private, SFBs, and Corporate NBFCs (including ${customTargets.length} custom user endpoints).`);
 
   const keyToUse = apiKey || process.env.GEMINI_API_KEY;
   let aiClient: GoogleGenAI | null = null;

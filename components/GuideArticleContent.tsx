@@ -208,9 +208,9 @@ export function GuideArticleContent({ initialArticle, slug }: GuideArticleConten
   const articleJsonLd = generateArticleJsonLd(article);
   const faqJsonLd = generateFaqJsonLd(article.faqs);
   const breadcrumbsJsonLd = generateBreadcrumbJsonLd([
-    { name: 'Home', url: 'https://bharatfixed.in' },
-    { name: 'Investor Guides', url: 'https://bharatfixed.in/guide' },
-    { name: article.title, url: `https://bharatfixed.in/guide/${article.slug}` }
+    { name: 'Home', url: 'https://yieldnest.online' },
+    { name: 'Investor Guides', url: 'https://yieldnest.online/guide' },
+    { name: article.title, url: `https://yieldnest.online/guide/${article.slug}` }
   ]);
 
   return (

@@ -65,7 +65,7 @@ export const initialGuideArticles: GuideArticle[] = [
     title: 'Section 80TTB Tax Exemption Guide: How Senior Citizens Save Up to ₹50,000 on FD Interest',
     metaTitle: 'Section 80TTB Guide: Save ₹50,000 on FD Interest | Tax FY 2025-26',
     metaDescription: 'Complete guide to Section 80TTB for Indian senior citizens. Learn how to claim ₹50,000 interest deduction on Bank FDs, Post Office deposits, and save tax.',
-    canonicalUrl: 'https://bharatfixed.in/guide/section-80ttb-tax-saving-senior-citizens-guide',
+    canonicalUrl: 'https://yieldnest.online/guide/section-80ttb-tax-saving-senior-citizens-guide',
     primaryKeyword: 'Section 80TTB',
     secondaryKeywords: ['Senior citizen FD tax', 'Form 15H', 'Section 80TTA vs 80TTB', 'TDS on fixed deposits', 'Bank interest tax deduction'],
     category: 'Taxation & 80TTB',
@@ -160,7 +160,7 @@ Consider Mr. R. Sharma, aged 66, who has invested ₹6,00,000 in a Senior Citize
     title: 'DICGC ₹5 Lakh Deposit Insurance: How to Safely Allocate ₹25 Lakhs Across Indian Banks',
     metaTitle: 'DICGC ₹5 Lakh Insurance Rule: Safely Spread ₹25 Lakhs in Banks',
     metaDescription: 'Learn how DICGC ₹5 Lakh deposit insurance works across Indian banks. Understand the "same right and same capacity" rule to protect high-value fixed deposits.',
-    canonicalUrl: 'https://bharatfixed.in/guide/dicgc-5-lakh-deposit-insurance-rules-bank-fd',
+    canonicalUrl: 'https://yieldnest.online/guide/dicgc-5-lakh-deposit-insurance-rules-bank-fd',
     primaryKeyword: 'DICGC 5 Lakh Insurance',
     secondaryKeywords: ['Deposit Insurance India', 'DICGC bank failure protection', 'Are SFBs insured by DICGC', 'Safe fixed deposit strategy'],
     category: 'Bank FDs & DICGC',
@@ -231,7 +231,7 @@ To maximize your yield while maintaining zero credit risk on high-value retireme
     title: 'RBI Floating Rate Savings Bonds (FRSB 2020): 8.05% Sovereign Yield vs Bank Fixed Deposits',
     metaTitle: 'RBI Floating Rate Bonds Guide (8.05%): Sovereign Safety vs Bank FDs',
     metaDescription: 'Detailed investor guide on RBI Floating Rate Savings Bonds (FRSB 2020). Learn interest reset formula, senior citizen premature withdrawal rules, and tax treatment.',
-    canonicalUrl: 'https://bharatfixed.in/guide/rbi-floating-rate-savings-bonds-complete-investor-guide',
+    canonicalUrl: 'https://yieldnest.online/guide/rbi-floating-rate-savings-bonds-complete-investor-guide',
     primaryKeyword: 'RBI Floating Rate Savings Bonds',
     secondaryKeywords: ['RBI FRSB 2020', '8.05% RBI Bond', 'RBI bonds for senior citizens', 'Sovereign debt India', 'RBI bonds premature withdrawal'],
     category: 'RBI Sovereign Bonds',
@@ -312,7 +312,7 @@ Although general investors must hold the bond until maturity at 7 years, senior 
     title: 'Corporate Fixed Deposits in India: CRISIL AAA vs AA Ratings, Risk Analysis & Tax Rules',
     metaTitle: 'Corporate Fixed Deposits Guide: CRISIL AAA vs AA Risk & Returns',
     metaDescription: 'Complete risk and yield analysis of Corporate Fixed Deposits in India. Learn credit ratings (CRISIL, ICRA), default safety checks, and Section 194A TDS rules.',
-    canonicalUrl: 'https://bharatfixed.in/guide/corporate-fixed-deposit-ratings-and-risk-analysis',
+    canonicalUrl: 'https://yieldnest.online/guide/corporate-fixed-deposit-ratings-and-risk-analysis',
     primaryKeyword: 'Corporate Fixed Deposits India',
     secondaryKeywords: ['CRISIL AAA rating meaning', 'NBFC fixed deposits', 'Bajaj Finance FD safety', 'Corporate FD vs Bank FD', 'TDS on company fixed deposits'],
     category: 'Corporate Debt & Ratings',
@@ -378,7 +378,7 @@ Because corporate issuers cannot collect low-cost current and savings account (C
     title: 'Form 15G and Form 15H Guide: How to Stop TDS Deductions on Bank Fixed Deposits',
     metaTitle: 'Form 15G & 15H Guide: Stop TDS Deductions on Bank FD Interest',
     metaDescription: 'Step-by-step instructions for submitting Form 15G (under 60) and Form 15H (senior citizens) to prevent TDS on bank interest income under Section 197A.',
-    canonicalUrl: 'https://bharatfixed.in/guide/form-15g-form-15h-zero-tds-bank-fd-interest-guide',
+    canonicalUrl: 'https://yieldnest.online/guide/form-15g-form-15h-zero-tds-bank-fd-interest-guide',
     primaryKeyword: 'Form 15G and Form 15H',
     secondaryKeywords: ['Avoid TDS on bank FD', 'Form 15H eligibility rules', 'Section 197A self declaration', 'Net banking submit 15H', 'Form 15G download'],
     category: 'Taxation & 80TTB',
@@ -637,11 +637,11 @@ export function generateArticleJsonLd(article: GuideArticle) {
     '@type': 'BlogPosting',
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': article.canonicalUrl || `https://bharatfixed.in/guide/${article.slug}`
+      '@id': article.canonicalUrl || `https://yieldnest.online/guide/${article.slug}`
     },
     headline: article.title,
     description: article.metaDescription || article.excerpt,
-    image: 'https://bharatfixed.in/og-image.png',
+    image: 'https://yieldnest.online/og-image.png',
     author: {
       '@type': 'Person',
       name: article.author?.name || 'Venkatesh Ramanathan',
@@ -650,10 +650,10 @@ export function generateArticleJsonLd(article: GuideArticle) {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'BharatFixed Debt Portal',
+      name: 'YIELDNEST.ONLINE Debt Portal',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://bharatfixed.in/icon.png'
+        url: 'https://yieldnest.online/icon.png'
       }
     },
     datePublished: article.publishedDate,

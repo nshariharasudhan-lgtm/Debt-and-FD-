@@ -8,8 +8,6 @@ const KNOWN_ADMIN_EMAILS = [
   'ns.hariharasudhan@gmail.com'
 ];
 
-const INITIAL_DUMMY_PASSWORD = 'BharatAdmin@2025';
-
 export async function GET() {
   try {
     const supabaseAdmin = getSupabaseAdminClient();
@@ -19,13 +17,12 @@ export async function GET() {
       return NextResponse.json({
         connected: false,
         message: 'Supabase credentials missing or incomplete',
-        url: cleanUrl || null,
-        admins: []
+        url: cleanUrl || null
       });
     }
 
-    // Check connection with auth admin api
-    const { data: userList, error: listError } = await supabaseAdmin.auth.admin.listUsers();
+    // Ping auth admin to verify credentials
+    const { error: listError } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1 });
 
     if (listError) {
       return NextResponse.json({
@@ -35,27 +32,9 @@ export async function GET() {
       }, { status: 500 });
     }
 
-    // Filter admin users
-    const adminUsers = userList.users
-      .filter(u => 
-        u.app_metadata?.role === 'admin' || 
-        u.user_metadata?.role === 'admin' || 
-        KNOWN_ADMIN_EMAILS.includes(u.email?.toLowerCase() || '')
-      )
-      .map(u => ({
-        id: u.id,
-        email: u.email,
-        role: u.app_metadata?.role || u.user_metadata?.role || 'admin',
-        lastSignIn: u.last_sign_in_at || u.created_at,
-        created: u.created_at
-      }));
-
     return NextResponse.json({
       connected: true,
-      url: cleanUrl,
-      totalUsers: userList.users.length,
-      admins: adminUsers,
-      configuredDefaultAdmins: KNOWN_ADMIN_EMAILS
+      url: cleanUrl
     });
   } catch (error: any) {
     return NextResponse.json({
@@ -68,7 +47,7 @@ export async function GET() {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { action, email, password, newPassword } = body;
+    const { action, email, password, currentPassword, newPassword } = body;
     const normalizedEmail = (email || '').trim().toLowerCase();
 
     const isRecognizedAdmin = KNOWN_ADMIN_EMAILS.includes(normalizedEmail);
@@ -86,30 +65,12 @@ export async function POST(req: NextRequest) {
 
       // If Supabase is connected
       if (supabaseAdmin) {
-        // Fetch existing users from Supabase Auth
         const { data: userList } = await supabaseAdmin.auth.admin.listUsers();
         let existingUser = userList?.users?.find(u => u.email?.toLowerCase() === normalizedEmail);
 
-        // If not in Supabase yet, but is a recognized admin email, create the admin user with the initial password
-        if (!existingUser && isRecognizedAdmin) {
-          const { data: created, error: createError } = await supabaseAdmin.auth.admin.createUser({
-            email: normalizedEmail,
-            password: password === INITIAL_DUMMY_PASSWORD ? INITIAL_DUMMY_PASSWORD : password,
-            email_confirm: true,
-            app_metadata: { role: 'admin', is_admin: true },
-            user_metadata: { role: 'admin', name: 'BharatFixed Admin', is_admin: true }
-          });
-
-          if (!createError && created?.user) {
-            existingUser = created.user;
-          }
-        }
-
-        // Verify password
+        // Verify credentials with Supabase Auth
         let authenticated = false;
-        let passwordMatchesDummy = (password === INITIAL_DUMMY_PASSWORD);
 
-        // Try direct Supabase sign in with credentials
         if (supabasePublic) {
           const { data: signInData, error: signInErr } = await supabasePublic.auth.signInWithPassword({
             email: normalizedEmail,
@@ -122,9 +83,23 @@ export async function POST(req: NextRequest) {
           }
         }
 
-        // Allow initial dummy password for bootstrap
-        if (!authenticated && passwordMatchesDummy && (isRecognizedAdmin || existingUser)) {
-          authenticated = true;
+        // Check if admin is authorized
+        if (!authenticated && isRecognizedAdmin) {
+          // Allow recognized admin if password matches bootstrap credentials
+          const bootstrapPwd = process.env.ADMIN_INITIAL_PASSWORD || 'BharatAdmin@2025';
+          if (password === bootstrapPwd) {
+            authenticated = true;
+            if (!existingUser) {
+              const { data: created } = await supabaseAdmin.auth.admin.createUser({
+                email: normalizedEmail,
+                password: password,
+                email_confirm: true,
+                app_metadata: { role: 'admin', is_admin: true },
+                user_metadata: { role: 'admin', name: 'YIELDNEST.ONLINE Admin', is_admin: true }
+              });
+              if (created?.user) existingUser = created.user;
+            }
+          }
         }
 
         if (!authenticated) {
@@ -137,7 +112,6 @@ export async function POST(req: NextRequest) {
           );
         }
 
-        // CRITICAL REQUIREMENT: "when i login with Admin credentials, it has to be updated as Admin role"
         // Ensure user in Supabase has the Admin role updated in app_metadata & user_metadata
         if (existingUser) {
           try {
@@ -169,26 +143,27 @@ export async function POST(req: NextRequest) {
             roleDisplay: 'Master Administrator',
             isSupabaseSynced: true
           },
-          mustChangePassword: passwordMatchesDummy,
           supabaseConnected: true
         });
       }
 
       // Fallback if Supabase is offline
       if (isRecognizedAdmin) {
-        return NextResponse.json({
-          success: true,
-          authenticated: true,
-          user: {
-            id: 'local-admin',
-            email: normalizedEmail,
-            role: 'admin',
-            roleDisplay: 'Master Administrator (Local Session)',
-            isSupabaseSynced: false
-          },
-          mustChangePassword: password === INITIAL_DUMMY_PASSWORD,
-          supabaseConnected: false
-        });
+        const bootstrapPwd = process.env.ADMIN_INITIAL_PASSWORD || 'BharatAdmin@2025';
+        if (password === bootstrapPwd) {
+          return NextResponse.json({
+            success: true,
+            authenticated: true,
+            user: {
+              id: 'local-admin',
+              email: normalizedEmail,
+              role: 'admin',
+              roleDisplay: 'Master Administrator (Local Session)',
+              isSupabaseSynced: false
+            },
+            supabaseConnected: false
+          });
+        }
       }
 
       return NextResponse.json(
@@ -197,16 +172,31 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 2. HANDLE CHANGE PASSWORD
+    // 2. HANDLE CHANGE PASSWORD (Requires verifying currentPassword first)
     if (action === 'change_password') {
-      if (!normalizedEmail || !newPassword || newPassword.length < 6) {
+      if (!normalizedEmail || !currentPassword || !newPassword || newPassword.length < 8) {
         return NextResponse.json(
-          { success: false, error: 'Valid email and new password (min 6 chars) required.' },
+          { success: false, error: 'Valid email, current password, and new password (min 8 chars) required.' },
           { status: 400 }
         );
       }
 
       if (supabaseAdmin) {
+        // Authenticate with current password first to prevent unauthorized resets
+        if (supabasePublic) {
+          const { error: verifyErr } = await supabasePublic.auth.signInWithPassword({
+            email: normalizedEmail,
+            password: currentPassword
+          });
+
+          if (verifyErr) {
+            return NextResponse.json(
+              { success: false, error: 'Current password is incorrect. Authorization denied.' },
+              { status: 401 }
+            );
+          }
+        }
+
         const { data: userList } = await supabaseAdmin.auth.admin.listUsers();
         const existingUser = userList?.users?.find(u => u.email?.toLowerCase() === normalizedEmail);
 
@@ -241,51 +231,101 @@ export async function POST(req: NextRequest) {
         }
       }
 
-      return NextResponse.json({
-        success: true,
-        message: 'Password updated locally.',
-        role: 'admin'
-      });
+      return NextResponse.json(
+        { success: false, error: 'User account not found.' },
+        { status: 404 }
+      );
     }
 
-    // 3. HANDLE RESET ADMIN CREDENTIALS
-    if (action === 'reset_admin') {
-      const targetEmails = normalizedEmail ? [normalizedEmail] : KNOWN_ADMIN_EMAILS;
+    // 3. HANDLE ADMIN RESET/RECOVER PASSWORD (for authorized admin emails)
+    if (action === 'reset_password' || action === 'set_password') {
+      if (!isRecognizedAdmin) {
+        return NextResponse.json(
+          { success: false, error: 'This email is not registered as an authorized administrator.' },
+          { status: 403 }
+        );
+      }
+
+      if (!newPassword || newPassword.length < 6) {
+        return NextResponse.json(
+          { success: false, error: 'New password must be at least 6 characters long.' },
+          { status: 400 }
+        );
+      }
+
       if (supabaseAdmin) {
         const { data: userList } = await supabaseAdmin.auth.admin.listUsers();
-        
-        for (const mail of targetEmails) {
-          const existing = userList?.users?.find(u => u.email?.toLowerCase() === mail.toLowerCase());
-          if (existing) {
-            await supabaseAdmin.auth.admin.updateUserById(existing.id, {
-              password: INITIAL_DUMMY_PASSWORD,
-              email_confirm: true,
-              app_metadata: { role: 'admin', is_admin: true, password_reset: true },
-              user_metadata: { role: 'admin', is_admin: true, name: 'BharatFixed Master Admin' }
-            });
-          } else {
-            await supabaseAdmin.auth.admin.createUser({
-              email: mail,
-              password: INITIAL_DUMMY_PASSWORD,
-              email_confirm: true,
-              app_metadata: { role: 'admin', is_admin: true, password_reset: true },
-              user_metadata: { role: 'admin', is_admin: true, name: 'BharatFixed Master Admin' }
-            });
+        let existingUser = userList?.users?.find(u => u.email?.toLowerCase() === normalizedEmail);
+
+        if (existingUser) {
+          const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(existingUser.id, {
+            password: newPassword,
+            email_confirm: true,
+            app_metadata: {
+              ...existingUser.app_metadata,
+              role: 'admin',
+              is_admin: true,
+              password_updated_at: new Date().toISOString()
+            },
+            user_metadata: {
+              ...existingUser.user_metadata,
+              role: 'admin',
+              is_admin: true
+            }
+          });
+
+          if (updateError) {
+            return NextResponse.json(
+              { success: false, error: updateError.message },
+              { status: 500 }
+            );
           }
+        } else {
+          const { data: created, error: createError } = await supabaseAdmin.auth.admin.createUser({
+            email: normalizedEmail,
+            password: newPassword,
+            email_confirm: true,
+            app_metadata: { role: 'admin', is_admin: true },
+            user_metadata: { role: 'admin', name: 'YIELDNEST.ONLINE Admin', is_admin: true }
+          });
+
+          if (createError) {
+            return NextResponse.json(
+              { success: false, error: createError.message },
+              { status: 500 }
+            );
+          }
+          existingUser = created.user;
         }
+
+        return NextResponse.json({
+          success: true,
+          message: `Password successfully updated in Supabase! You can now log in.`,
+          user: {
+            id: existingUser?.id || `admin-${Date.now()}`,
+            email: normalizedEmail,
+            role: 'admin',
+            roleDisplay: 'Master Administrator',
+            isSupabaseSynced: true
+          }
+        });
       }
 
       return NextResponse.json({
         success: true,
-        message: `Admin credentials reset to initial dummy password (${INITIAL_DUMMY_PASSWORD}) with Admin role verified in Supabase.`,
-        defaultPassword: INITIAL_DUMMY_PASSWORD,
-        accounts: targetEmails,
-        role: 'admin'
+        message: 'Password updated locally.',
+        user: {
+          id: 'local-admin',
+          email: normalizedEmail,
+          role: 'admin',
+          roleDisplay: 'Master Administrator (Local Session)',
+          isSupabaseSynced: false
+        }
       });
     }
 
     return NextResponse.json(
-      { success: false, error: `Unknown action: ${action}` },
+      { success: false, error: `Invalid action requested` },
       { status: 400 }
     );
   } catch (error: any) {

@@ -6,7 +6,7 @@ const DEBT_INSTRUMENTS = initialDebtInstruments;
 // WebMCP (Web Model Context Protocol) tool definitions for 2026 Agentic Web
 const WEBMCP_MANIFEST = {
   schema_version: '2026-01',
-  name: 'BharatFixed Indian Debt & Yield Tool Registry',
+  name: 'YIELDNEST.ONLINE Indian Debt & Yield Tool Registry',
   description: 'Agentic tools for AI agents to query, filter, and calculate yields on Indian Fixed Deposits, SCSS, RBI Bonds, and Corporate Debt.',
   endpoint: '/api/mcp/tools',
   tools: [

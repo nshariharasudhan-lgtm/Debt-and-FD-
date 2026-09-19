@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import { YieldNestLogo } from './YieldNestLogo';
 import { Landmark, ShieldAlert, Heart, ExternalLink, Award, FileCode, CheckCircle2 } from 'lucide-react';
 
 export function Footer() {
@@ -11,14 +12,9 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           
           {/* Brand & Purpose */}
-          <div className="space-y-3 md:col-span-2">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-xs">
-                <Landmark className="w-4 h-4" />
-              </div>
-              <span className="text-base font-bold text-white font-serif tracking-tight">
-                Bharat<span className="text-blue-400">Fixed</span> Debt Portal
-              </span>
+          <div className="space-y-4 md:col-span-2">
+            <div id="footer-logo-placeholder" className="bg-white/95 rounded-2xl p-4 sm:p-5 inline-flex items-center justify-start shadow-md w-72 sm:w-84 md:w-96 max-w-full">
+              <YieldNestLogo variant="full" height={80} className="w-full h-auto" imgClassName="object-left" />
             </div>
             <p className="text-slate-400 text-xs leading-relaxed max-w-md">
               An independent fixed income intelligence and yield analytics portal dedicated to Indian Bank Fixed Deposits, Corporate FDs, RBI Floating Bonds, and Government Debt Instruments. Built for senior citizens and conservative investors seeking safe, predictable retirement cashflows.
@@ -111,7 +107,7 @@ export function Footer() {
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-slate-500">
             <div>
-              &copy; {new Date().getFullYear()} BharatFixed Debt Intelligence • Last Verified September 2026.
+              &copy; {new Date().getFullYear()} YIELDNEST.ONLINE Debt Intelligence • Last Verified September 2026.
             </div>
             <div className="text-[11px] text-slate-500">
               Crafted for Indian Senior Citizens &amp; Fixed-Income Depositors • Independent Financial Research

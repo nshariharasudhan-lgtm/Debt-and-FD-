@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { Navbar } from '@/components/Navbar';
 import { MarketTicker } from '@/components/MarketTicker';
 import { SeniorCitizenSpecialBanner } from '@/components/SeniorCitizenSpecialBanner';
@@ -45,8 +46,8 @@ export default function HomePage() {
   const [activeTab, setActiveTab] = useState<FeatureTabKey>('directory');
 
   useEffect(() => {
-    // Safely hydrate client-side saved state from localStorage after mount in next tick
-    const timer = setTimeout(() => {
+    // Safely hydrate client-side saved state from localStorage after mount
+    queueMicrotask(() => {
       try {
         const savedBench = localStorage.getItem('bharat_debt_benchmarks');
         if (savedBench) setBenchmarks(JSON.parse(savedBench));
@@ -56,7 +57,7 @@ export default function HomePage() {
       } catch (e) {
         console.error(e);
       }
-    }, 0);
+    });
 
     // Listen for rate changes synced from Admin Dashboard
     const handleStorageChange = () => {
@@ -71,7 +72,6 @@ export default function HomePage() {
     };
     window.addEventListener('storage', handleStorageChange);
     return () => {
-      clearTimeout(timer);
       window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
@@ -152,78 +152,11 @@ export default function HomePage() {
         {/* ========================================================================= */}
         {(activeTab === 'directory' || activeTab === 'all') && (
           <div className="space-y-6 w-full max-w-full overflow-hidden">
-            {/* Streamlined Hero Section */}
+            {/* Front-Loaded Direct Answer Capsule */}
             <section className="pt-1 pb-1 w-full max-w-full overflow-hidden">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-8 shadow-xs w-full max-w-full overflow-hidden">
-                <div className="space-y-2.5 max-w-2xl min-w-0">
-                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-800 border border-blue-200 text-xs font-bold uppercase tracking-wider">
-                    <Landmark className="w-3.5 h-3.5 text-blue-700" />
-                    <span>Pan-India Fixed Income & Bond Portal</span>
-                  </div>
-
-                  <h1 className={`${isLargeText ? 'text-3xl sm:text-5xl' : 'text-2xl sm:text-4xl'} font-bold font-serif text-slate-900 tracking-tight leading-tight`}>
-                    Find Safe Bank FDs &amp; Sovereign Bonds in India
-                  </h1>
-
-                  <p className={`${isLargeText ? 'text-base sm:text-lg' : 'text-sm sm:text-base'} text-slate-600 leading-relaxed`}>
-                    Compare certified interest rates up to <strong className="text-slate-900 font-bold">9.40% p.a.</strong> across scheduled banks with statutory DICGC ₹5 Lakh deposit insurance, 8.20% Govt SCSS, and CRISIL AAA corporate deposits.
-                  </p>
-
-                  <div className="flex flex-wrap items-center gap-2 sm:gap-3 pt-1 text-xs text-slate-700">
-                    <span className="flex items-center gap-1 bg-slate-100 px-2.5 py-1 rounded-lg font-semibold">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                      DICGC ₹5 Lakh Insured
-                    </span>
-                    <span className="flex items-center gap-1 bg-amber-50 text-amber-900 border border-amber-200 px-2.5 py-1 rounded-lg font-semibold">
-                      <Award className="w-3.5 h-3.5 text-amber-600" />
-                      Sec 80TTB ₹50,000 Tax-Free
-                    </span>
-                    <span className="flex items-center gap-1 bg-slate-100 px-2.5 py-1 rounded-lg font-semibold">
-                      <TrendingUp className="w-3.5 h-3.5 text-blue-600" />
-                      Quarterly Compounding
-                    </span>
-                  </div>
-                </div>
-
-                {/* Quick Status / Callout Box */}
-                <div className="bg-slate-50 rounded-2xl border border-slate-200 p-4 sm:p-5 w-full sm:w-auto sm:min-w-[280px] shrink-0 space-y-3">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="text-slate-500 font-semibold uppercase tracking-wider">Browsing Mode</span>
-                    <span className={`px-2 py-0.5 rounded-md font-bold text-xs ${
-                      isSeniorCitizen 
-                        ? 'bg-amber-400 text-slate-950 font-extrabold' 
-                        : 'bg-slate-200 text-slate-700'
-                    }`}>
-                      {isSeniorCitizen ? 'Senior (60+)' : 'General'}
-                    </span>
-                  </div>
-
-                  <div>
-                    <span className="text-xs text-slate-500 block">Top Insured Bank FD</span>
-                    <span className="text-3xl font-extrabold text-slate-900 font-mono">
-                      {isSeniorCitizen ? '9.50%' : '9.00%'} <span className="text-xs text-slate-500 font-normal">p.a.</span>
-                    </span>
-                  </div>
-
-                  <button
-                    onClick={() => setIsSeniorCitizen(!isSeniorCitizen)}
-                    id="hero-toggle-senior-btn"
-                    className={`w-full py-2 px-3 rounded-xl text-xs font-bold transition-all border shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer ${
-                      isSeniorCitizen
-                        ? 'bg-amber-400 hover:bg-amber-300 text-slate-950 border-amber-500'
-                        : 'bg-white hover:bg-slate-100 text-slate-800 border-slate-300'
-                    }`}
-                  >
-                    <Award className="w-4 h-4 text-amber-700" />
-                    <span>{isSeniorCitizen ? 'Switch to General Rates (<60)' : 'Switch to Senior Rates (60+)'}</span>
-                  </button>
-                </div>
-              </div>
-
-              {/* Front-Loaded Direct Answer Capsule (Checklist Item 7 & 6) */}
               <div 
                 data-content-capsule="true"
-                className="mt-4 bg-slate-900 text-white rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-sm"
+                className="bg-slate-900 text-white rounded-2xl p-4 sm:p-5 border border-slate-800 shadow-sm"
               >
                 <div className="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider mb-2.5">
                   <Sparkles className="w-4 h-4 text-amber-400" />
@@ -320,74 +253,94 @@ export default function HomePage() {
 
         {/* Quick Cross-Feature Navigation Footer Bar */}
         {activeTab !== 'all' && (
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4 mt-8">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
-                Quick Tool Switcher
-              </span>
-              <p className="text-xs sm:text-sm font-semibold text-slate-800">
-                Explore other fixed income calculation &amp; planning tools
-              </p>
+          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs space-y-4 mt-8">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-slate-500 block">
+                  Quick Tool Switcher
+                </span>
+                <p className="text-xs sm:text-sm font-semibold text-slate-800">
+                  Switch view in-place or browse separate pages
+                </p>
+              </div>
+              
+              <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
+                {activeTab !== 'directory' && (
+                  <button
+                    onClick={() => handleSelectTab('directory')}
+                    className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Building2 className="w-3.5 h-3.5 text-blue-600" />
+                    <span>FD Directory</span>
+                  </button>
+                )}
+
+                {activeTab !== 'calculator' && (
+                  <button
+                    onClick={() => handleSelectTab('calculator')}
+                    className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Calculator className="w-3.5 h-3.5 text-amber-600" />
+                    <span>ROI Calculator</span>
+                  </button>
+                )}
+
+                {activeTab !== 'pension' && (
+                  <button
+                    onClick={() => handleSelectTab('pension')}
+                    className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Calendar className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>Pension Planner</span>
+                  </button>
+                )}
+
+                {activeTab !== 'compare' && (
+                  <button
+                    onClick={() => handleSelectTab('compare')}
+                    className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Scale className="w-3.5 h-3.5 text-purple-600" />
+                    <span>Compare Rates</span>
+                  </button>
+                )}
+
+                {activeTab !== 'guides' && (
+                  <button
+                    onClick={() => handleSelectTab('guides')}
+                    className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <BookOpen className="w-3.5 h-3.5 text-slate-700" />
+                    <span>Guides &amp; 80TTB</span>
+                  </button>
+                )}
+
+                <button
+                  onClick={() => handleSelectTab('all')}
+                  className="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold flex items-center gap-1 transition-colors cursor-pointer"
+                >
+                  <span>View All</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-            
-            <div className="flex flex-wrap items-center justify-center gap-2 text-xs">
-              {activeTab !== 'directory' && (
-                <button
-                  onClick={() => handleSelectTab('directory')}
-                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Building2 className="w-3.5 h-3.5 text-blue-600" />
-                  <span>FD Directory</span>
-                </button>
-              )}
 
-              {activeTab !== 'calculator' && (
-                <button
-                  onClick={() => handleSelectTab('calculator')}
-                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Calculator className="w-3.5 h-3.5 text-amber-600" />
-                  <span>ROI Calculator</span>
-                </button>
-              )}
-
-              {activeTab !== 'pension' && (
-                <button
-                  onClick={() => handleSelectTab('pension')}
-                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Calendar className="w-3.5 h-3.5 text-emerald-600" />
-                  <span>Pension Planner</span>
-                </button>
-              )}
-
-              {activeTab !== 'compare' && (
-                <button
-                  onClick={() => handleSelectTab('compare')}
-                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <Scale className="w-3.5 h-3.5 text-purple-600" />
-                  <span>Compare Rates</span>
-                </button>
-              )}
-
-              {activeTab !== 'guides' && (
-                <button
-                  onClick={() => handleSelectTab('guides')}
-                  className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
-                >
-                  <BookOpen className="w-3.5 h-3.5 text-slate-700" />
-                  <span>Guides &amp; 80TTB</span>
-                </button>
-              )}
-
-              <button
-                onClick={() => handleSelectTab('all')}
-                className="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold flex items-center gap-1 transition-colors cursor-pointer"
-              >
-                <span>View All</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+            {/* Dedicated Indexable URLs for Google & AI Search Crawlers */}
+            <div className="pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500">
+              <span className="font-semibold text-slate-700">Dedicated Indexable Pages:</span>
+              <div className="flex flex-wrap items-center gap-3">
+                <Link href="/fd-rates" className="hover:text-blue-700 hover:underline">FD Rate Tables</Link>
+                <span className="text-slate-300">•</span>
+                <Link href="/calculator" className="hover:text-blue-700 hover:underline">ROI Calculator</Link>
+                <span className="text-slate-300">•</span>
+                <Link href="/pension-planner" className="hover:text-blue-700 hover:underline">Pension Planner</Link>
+                <span className="text-slate-300">•</span>
+                <Link href="/compare-rates" className="hover:text-blue-700 hover:underline">Compare Rates</Link>
+                <span className="text-slate-300">•</span>
+                <Link href="/tax-rules-80ttb" className="hover:text-blue-700 hover:underline">Tax &amp; 80TTB Rules</Link>
+                <span className="text-slate-300">•</span>
+                <Link href="/guide" className="hover:text-blue-700 hover:underline">Knowledge Base</Link>
+              </div>
             </div>
           </div>
         )}

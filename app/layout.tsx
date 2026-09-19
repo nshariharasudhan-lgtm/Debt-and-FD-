@@ -3,11 +3,11 @@ import './globals.css';
 import { SITE_STRUCTURED_DATA } from '@/lib/schema';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://bharatfixed.in'),
+  metadataBase: new URL('https://yieldnest.online'),
   title: 'Indian Debt & Fixed Income Portal | Bank FDs, Corporate Bonds, RBI Bonds & Yield Analytics',
   description: 'Comprehensive intelligence and yield analytics on Indian Fixed Deposits, Corporate Bonds, RBI Savings Bonds, SCSS, and G-Secs with tailored calculators for senior citizens and investors.',
   alternates: {
-    canonical: 'https://bharatfixed.in',
+    canonical: 'https://yieldnest.online',
   },
   keywords: [
     'Indian Debt Instruments',
@@ -22,9 +22,9 @@ export const metadata: Metadata = {
     'Government Securities G-Sec',
     'DICGC Insurance Limit'
   ],
-  authors: [{ name: 'Venkatesh Ramanathan, CFP®, CFA', url: 'https://bharatfixed.in/#author-methodology' }],
-  creator: 'BharatFixed Research Desk',
-  publisher: 'BharatFixed',
+  authors: [{ name: 'Venkatesh Ramanathan, CFP®, CFA', url: 'https://yieldnest.online/#author-methodology' }],
+  creator: 'YIELDNEST.ONLINE Research Desk',
+  publisher: 'YIELDNEST.ONLINE',
   robots: {
     index: true,
     follow: true,
@@ -43,16 +43,16 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Indian Debt & Fixed Income Portal | Yield Analytics & Comparison',
+    title: 'YIELDNEST.ONLINE | Indian Debt & Fixed Income Portal',
     description: 'Compare Bank FDs, Corporate Bonds, RBI Bonds and calculate real post-tax returns for Senior Citizens and Indian debt investors.',
-    url: 'https://bharatfixed.in',
-    siteName: 'BharatFixed',
+    url: 'https://yieldnest.online',
+    siteName: 'YIELDNEST.ONLINE',
     locale: 'en_IN',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Indian Debt & Fixed Income Portal',
+    title: 'YIELDNEST.ONLINE | Fixed Income & Yield Analytics',
     description: 'Compare Bank FDs, Corporate Bonds, RBI Bonds and calculate real post-tax returns for Senior Citizens and Indian debt investors.',
   },
   other: {

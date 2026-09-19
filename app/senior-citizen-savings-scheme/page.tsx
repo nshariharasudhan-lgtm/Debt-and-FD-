@@ -17,12 +17,12 @@ export const metadata: Metadata = {
   title: 'Senior Citizen Savings Scheme (SCSS 2026) | 8.20% Interest Rate & Tax Guide',
   description: 'Complete guide to the Senior Citizen Savings Scheme (SCSS) in India. Current 8.20% quarterly interest rate, ₹30 Lakh maximum limit, Section 80C & Section 80TTB tax benefits.',
   alternates: {
-    canonical: 'https://bharatfixed.in/senior-citizen-savings-scheme',
+    canonical: 'https://yieldnest.online/senior-citizen-savings-scheme',
   },
   openGraph: {
     title: 'Senior Citizen Savings Scheme (SCSS 2026) | 8.20% Interest Rate & Tax Guide',
     description: 'Current 8.20% quarterly interest rate, ₹30 Lakh maximum limit, Section 80C & Section 80TTB tax benefits.',
-    url: 'https://bharatfixed.in/senior-citizen-savings-scheme',
+    url: 'https://yieldnest.online/senior-citizen-savings-scheme',
     type: 'article',
   },
 };
@@ -42,7 +42,7 @@ export default function ScssPage() {
             className="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-blue-700 hover:text-blue-900 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span>Back to BharatFixed Portal</span>
+            <span>Back to YIELDNEST.ONLINE Portal</span>
           </Link>
           <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200 text-amber-900 text-xs font-bold">
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>

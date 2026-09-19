@@ -243,7 +243,7 @@ export function SEOContentSection() {
       >
         <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500">
           <Landmark className="w-4 h-4 text-blue-700" />
-          <span>BharatFixed Editorial Policy &amp; Sourcing Standards</span>
+          <span>YIELDNEST.ONLINE Editorial Policy &amp; Sourcing Standards</span>
         </div>
 
         <h3 className="text-xl sm:text-2xl font-bold font-serif text-slate-900">
@@ -251,7 +251,7 @@ export function SEOContentSection() {
         </h3>
 
         <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-          BharatFixed is an independent, reader-supported research platform committed to delivering accurate, objective fixed-income information for Indian seniors and conservative debt investors.
+          YIELDNEST.ONLINE is an independent, reader-supported research platform committed to delivering accurate, objective fixed-income information for Indian seniors and conservative debt investors.
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2 text-xs sm:text-sm text-slate-700">
@@ -278,7 +278,7 @@ export function SEOContentSection() {
         </div>
 
         <div className="pt-2 text-xs text-slate-500 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100">
-          <span>Editorial Contact: <a href="mailto:editorial@bharatfixed.in" className="text-blue-700 hover:underline">editorial@bharatfixed.in</a></span>
+          <span>Editorial Contact: <a href="mailto:editorial@yieldnest.online" className="text-blue-700 hover:underline">editorial@yieldnest.online</a></span>
           <span>Readers are encouraged to report rate changes or text discrepancies for immediate verification.</span>
         </div>
       </div>
