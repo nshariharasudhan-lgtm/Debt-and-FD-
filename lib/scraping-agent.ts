@@ -43,235 +43,9 @@ export interface AgentExecutionLog {
   source?: string;
 }
 
-// Comprehensive target list covering all major PSU banks, Private banks, SFBs, NBFCs, and Corporates
-export const defaultScrapeTargets: ScrapeTarget[] = [
-  // --- PSU Public Sector Banks ---
-  {
-    id: 'sbi-bank',
-    name: 'State Bank of India (SBI)',
-    category: 'psu_bank',
-    officialUrl: 'https://sbi.co.in/web/interest-rates/deposit-rates/retail-domestic-term-deposits',
-    status: 'idle'
-  },
-  {
-    id: 'pnb-bank',
-    name: 'Punjab National Bank (PNB)',
-    category: 'psu_bank',
-    officialUrl: 'https://www.pnbindia.in/interest-rates-deposit.html',
-    status: 'idle'
-  },
-  {
-    id: 'bob-bank',
-    name: 'Bank of Baroda (BoB)',
-    category: 'psu_bank',
-    officialUrl: 'https://www.bankofbaroda.in/interest-rates-and-service-charges/deposits-interest-rates',
-    status: 'idle'
-  },
-  {
-    id: 'canara-bank',
-    name: 'Canara Bank',
-    category: 'psu_bank',
-    officialUrl: 'https://canarabank.com/deposit-interest-rates',
-    status: 'idle'
-  },
-  {
-    id: 'union-bank',
-    name: 'Union Bank of India',
-    category: 'psu_bank',
-    officialUrl: 'https://www.unionbankofindia.co.in/english/interest-rates.aspx',
-    status: 'idle'
-  },
-
-  // --- Leading Private Sector Banks ---
-  {
-    id: 'hdfc-bank',
-    name: 'HDFC Bank Ltd',
-    category: 'private_bank',
-    officialUrl: 'https://www.hdfcbank.com/personal/save/deposits/fixed-deposit-interest-rate',
-    status: 'idle'
-  },
-  {
-    id: 'icici-bank',
-    name: 'ICICI Bank Ltd',
-    category: 'private_bank',
-    officialUrl: 'https://www.icicibank.com/personal-banking/deposits/fixed-deposit/interest-rates',
-    status: 'idle'
-  },
-  {
-    id: 'axis-bank',
-    name: 'Axis Bank Ltd',
-    category: 'private_bank',
-    officialUrl: 'https://www.axisbank.com/retail/fixed-deposit-rates',
-    status: 'idle'
-  },
-  {
-    id: 'kotak-bank',
-    name: 'Kotak Mahindra Bank',
-    category: 'private_bank',
-    officialUrl: 'https://www.kotak.com/en/rates/interest-rates/fixed-deposit-rates.html',
-    status: 'idle'
-  },
-  {
-    id: 'indusind-bank',
-    name: 'IndusInd Bank Ltd',
-    category: 'private_bank',
-    officialUrl: 'https://www.indusind.com/in/en/personal/rates/deposit-rates.html',
-    status: 'idle'
-  },
-  {
-    id: 'federal-bank',
-    name: 'Federal Bank Ltd',
-    category: 'private_bank',
-    officialUrl: 'https://www.federalbank.co.in/deposit-rate',
-    status: 'idle'
-  },
-  {
-    id: 'idfc-first',
-    name: 'IDFC FIRST Bank',
-    category: 'private_bank',
-    officialUrl: 'https://www.idfcfirstbank.com/interest-rate',
-    status: 'idle'
-  },
-
-  // --- High Yield Small Finance Banks (SFBs) ---
-  {
-    id: 'unity-sfb',
-    name: 'Unity Small Finance Bank',
-    category: 'sfb_bank',
-    officialUrl: 'https://theunitybank.com/interest-rates.html',
-    status: 'idle'
-  },
-  {
-    id: 'au-sfb',
-    name: 'AU Small Finance Bank',
-    category: 'sfb_bank',
-    officialUrl: 'https://www.aubank.in/interest-rates/fixed-deposit-interest-rates',
-    status: 'idle'
-  },
-  {
-    id: 'equitas-sfb',
-    name: 'Equitas Small Finance Bank',
-    category: 'sfb_bank',
-    officialUrl: 'https://www.equitasbank.com/fixed-deposit-interest-rates',
-    status: 'idle'
-  },
-  {
-    id: 'ujjivan-sfb',
-    name: 'Ujjivan Small Finance Bank',
-    category: 'sfb_bank',
-    officialUrl: 'https://www.ujjivansfb.in/interest-rates',
-    status: 'idle'
-  },
-  {
-    id: 'suryoday-sfb',
-    name: 'Suryoday Small Finance Bank',
-    category: 'sfb_bank',
-    officialUrl: 'https://www.suryodaybank.com/rate-of-interest',
-    status: 'idle'
-  },
-  {
-    id: 'jana-sfb',
-    name: 'Jana Small Finance Bank',
-    category: 'sfb_bank',
-    officialUrl: 'https://www.janabank.com/interest-rates/',
-    status: 'idle'
-  },
-  {
-    id: 'utkarsh-sfb',
-    name: 'Utkarsh Small Finance Bank',
-    category: 'sfb_bank',
-    officialUrl: 'https://www.utkarsh.bank/interest-rates',
-    status: 'idle'
-  },
-  {
-    id: 'esaf-sfb',
-    name: 'ESAF Small Finance Bank',
-    category: 'sfb_bank',
-    officialUrl: 'https://www.esafbank.com/interest-rates/',
-    status: 'idle'
-  },
-
-  // --- Premier NBFCs & Corporate Deposits ---
-  {
-    id: 'bajaj-finance',
-    name: 'Bajaj Finance Limited',
-    category: 'corporate_nbfc',
-    officialUrl: 'https://www.bajajfinserv.in/fixed-deposit-interest-rates',
-    status: 'idle'
-  },
-  {
-    id: 'shriram-finance',
-    name: 'Shriram Finance Ltd',
-    category: 'corporate_nbfc',
-    officialUrl: 'https://www.shriramfinance.in/fixed-deposit-interest-rates',
-    status: 'idle'
-  },
-  {
-    id: 'mmfs-nbfc',
-    name: 'Mahindra Finance (MMFS)',
-    category: 'corporate_nbfc',
-    officialUrl: 'https://www.mahindrafinance.com/fixed-deposit',
-    status: 'idle'
-  },
-  {
-    id: 'sundaram-finance',
-    name: 'Sundaram Finance Limited',
-    category: 'corporate_nbfc',
-    officialUrl: 'https://www.sundaramfinance.in/fixed-deposit',
-    status: 'idle'
-  },
-  {
-    id: 'tata-capital',
-    name: 'Tata Capital Financial Services',
-    category: 'corporate_nbfc',
-    officialUrl: 'https://www.tatacapital.com/investments/fixed-deposit.html',
-    status: 'idle'
-  },
-  {
-    id: 'lt-finance',
-    name: 'L&T Finance Holdings',
-    category: 'corporate_nbfc',
-    officialUrl: 'https://www.ltfs.com/our-products/fixed-deposit',
-    status: 'idle'
-  },
-  {
-    id: 'muthoot-capital',
-    name: 'Muthoot Capital Services',
-    category: 'corporate_nbfc',
-    officialUrl: 'https://www.muthootcap.com/fixed-deposit/',
-    status: 'idle'
-  },
-  {
-    id: 'lic-housing',
-    name: 'LIC Housing Finance Ltd',
-    category: 'corporate_nbfc',
-    officialUrl: 'https://www.lichousing.com/deposit-interest-rates',
-    status: 'idle'
-  },
-  {
-    id: 'pnb-housing',
-    name: 'PNB Housing Finance',
-    category: 'corporate_nbfc',
-    officialUrl: 'https://www.pnbhousing.com/fixed-deposit/interest-rates/',
-    status: 'idle'
-  },
-
-  // --- Sovereign & Statutory Debt ---
-  {
-    id: 'rbi-sovereign',
-    name: 'Reserve Bank of India (RBI Bonds & MoF)',
-    category: 'rbi_sovereign',
-    officialUrl: 'https://www.rbi.org.in/Scripts/BS_PressReleaseDisplay.aspx',
-    status: 'idle'
-  },
-  {
-    id: 'post-office',
-    name: 'Department of Posts / India Post (SCSS & NSC)',
-    category: 'rbi_sovereign',
-    officialUrl: 'https://www.indiapost.gov.in/Financial/pages/content/post-office-saving-schemes.aspx',
-    status: 'idle'
-  }
-];
+// Default scrape targets - kept empty so only admin-added URLs are scraped
+// as per user requirement: "remove the already created URL's and Allow the admin to add URL's for scrapping. only those URL's should be scrapped"
+export const defaultScrapeTargets: ScrapeTarget[] = [];
 
 // Comprehensive verified rate schedule mappings covering all tenures, compounding, and ROIs
 export const fallbackCardRates: Record<string, Partial<ScrapedRateResult>[]> = {
@@ -1071,19 +845,19 @@ export async function runScrapingAgent(
     addLog('CONNECT', 'info', `Connecting to official tariff endpoint: ${target.officialUrl}`, target.name);
 
     try {
-      // If this is a custom target with a live URL, use scrapeCustomUrl for live extraction
-      if (target.isCustom && target.officialUrl) {
-        addLog('SCRAPE', 'info', `Autonomous crawler analyzing custom target endpoint: ${target.officialUrl}`, target.name);
+      // If this target has a live officialUrl, perform autonomous live crawler extraction
+      if (target.officialUrl) {
+        addLog('SCRAPE', 'info', `Autonomous crawler analyzing live target endpoint: ${target.officialUrl}`, target.name);
         try {
           const liveResult = await scrapeCustomUrl(target.officialUrl, existingInstruments);
           if (liveResult.success && liveResult.scrapedRateResult) {
             results.push(liveResult.scrapedRateResult);
             changesCount++;
-            addLog('VALIDATE', 'success', `Custom endpoint crawled successfully: ${liveResult.scrapedInstrument.name} (General: ${liveResult.scrapedInstrument.generalRate}%, Senior: ${liveResult.scrapedInstrument.seniorCitizenRate}%)`, target.name);
+            addLog('VALIDATE', 'success', `Endpoint crawled live: ${liveResult.scrapedInstrument.name} (General: ${liveResult.scrapedInstrument.generalRate}%, Senior: ${liveResult.scrapedInstrument.seniorCitizenRate}%, As of: ${liveResult.scrapedInstrument.lastUpdated})`, target.name);
             continue;
           }
         } catch (crawlErr: any) {
-          addLog('SCRAPE', 'warn', `Custom endpoint live parse notice: ${crawlErr.message || 'Using heuristic fallback'}.`, target.name);
+          addLog('SCRAPE', 'warn', `Live endpoint parse notice: ${crawlErr.message || 'Using heuristic fallback'}.`, target.name);
         }
       }
 

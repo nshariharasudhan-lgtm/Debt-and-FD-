@@ -51,9 +51,9 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/guide" className="hover:text-amber-400 transition-colors flex items-center gap-1.5">
+                <Link href="/resources" className="hover:text-amber-400 transition-colors flex items-center gap-1.5">
                   <CheckCircle2 className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Research Blog &amp; Guides Hub</span>
+                  <span>Resources &amp; Guides Hub</span>
                 </Link>
               </li>
               <li>

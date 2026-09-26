@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import './globals.css';
 import { SITE_STRUCTURED_DATA } from '@/lib/schema';
 
@@ -65,20 +66,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        {/* Google tag (gtag.js) */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-8TSJVS8X60" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-
-              gtag('config', 'G-8TSJVS8X60');
-            `,
-          }}
-        />
-
         <link rel="alternate" type="application/json+tools" href="/api/mcp/tools" title="WebMCP Tool Registry" />
         <link rel="agent-manifest" href="/.well-known/agent.json" />
         <link rel="help" href="/llms.txt" title="LLMs Context Directory" />
@@ -89,8 +76,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className="w-full max-w-full overflow-x-hidden" suppressHydrationWarning>{children}</body>
+      <body className="w-full max-w-full overflow-x-hidden" suppressHydrationWarning>
+        {/* Google tag (gtag.js) */}
+        <Script 
+          strategy="afterInteractive" 
+          src="https://www.googletagmanager.com/gtag/js?id=G-8TSJVS8X60" 
+        />
+        <Script
+          id="gtag-init"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+
+              gtag('config', 'G-8TSJVS8X60');
+            `,
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
-

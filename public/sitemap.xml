@@ -2,86 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://yieldnest.online/</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
+    <lastmod>2026-09-26T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://yieldnest.online/calculator</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
+    <loc>https://yieldnest.online/fd-rates</loc>
+    <lastmod>2026-09-26T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://yieldnest.online/pension-planner</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
+    <loc>https://yieldnest.online/calculator</loc>
+    <lastmod>2026-09-26T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://yieldnest.online/compare-rates</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
+    <lastmod>2026-09-26T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
-    <loc>https://yieldnest.online/tax-rules-80ttb</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.90</priority>
-  </url>
-  <url>
-    <loc>https://yieldnest.online/fd-rates</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
+    <loc>https://yieldnest.online/resources</loc>
+    <lastmod>2026-09-26T00:00:00+00:00</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.95</priority>
   </url>
   <url>
     <loc>https://yieldnest.online/senior-citizen-savings-scheme</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
+    <lastmod>2026-09-26T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
     <loc>https://yieldnest.online/rbi-floating-rate-bonds</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
+    <lastmod>2026-09-26T00:00:00+00:00</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://yieldnest.online/guide</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
-    <changefreq>daily</changefreq>
     <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://yieldnest.online/guide/section-80ttb-tax-saving-senior-citizens-guide</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <loc>https://yieldnest.online/pension-planner</loc>
+    <lastmod>2026-09-26T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://yieldnest.online/guide/dicgc-5-lakh-deposit-insurance-rules-bank-fd</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
+    <loc>https://yieldnest.online/tax-rules-80ttb</loc>
+    <lastmod>2026-09-26T00:00:00+00:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.90</priority>
   </url>
   <url>
-    <loc>https://yieldnest.online/guide/rbi-floating-rate-savings-bonds-complete-investor-guide</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://yieldnest.online/guide/corporate-fixed-deposit-ratings-and-risk-analysis</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-  <url>
-    <loc>https://yieldnest.online/guide/form-15g-form-15h-zero-tds-bank-fd-interest-guide</loc>
-    <lastmod>2026-09-19T00:00:00+00:00</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://yieldnest.online/guide</loc>
+    <lastmod>2026-09-26T00:00:00+00:00</lastmod>
+    <changefreq>daily</changefreq>
     <priority>0.85</priority>
   </url>
 </urlset>

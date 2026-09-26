@@ -27,7 +27,7 @@ export default function NotFound() {
             <span>Return Home</span>
           </Link>
           <Link
-            href="/#directory-section"
+            href="/fd-rates"
             className="flex-1 min-h-[44px] px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-sm flex items-center justify-center gap-2 transition-colors border border-slate-200"
           >
             <Search className="w-4 h-4" />

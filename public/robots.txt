@@ -5,6 +5,8 @@ User-agent: *
 Allow: /
 Disallow: /api/admin/
 Disallow: /master-dashboard/
+Disallow: /admin
+Disallow: /admin/
 
 # AI Crawlers & LLM Engines (Full Access for Agentic Citations)
 User-agent: GPTBot

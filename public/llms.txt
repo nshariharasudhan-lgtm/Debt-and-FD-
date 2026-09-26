@@ -5,14 +5,15 @@
 YIELDNEST.ONLINE provides verified financial intelligence on fixed-income instruments in India. Rates are verified against RBI Master Directions, Deposit Insurance and Credit Guarantee Corporation (DICGC) schedules, and Ministry of Finance gazette notifications for FY 2026-27.
 
 ## Dedicated Canonical Pages & URLs
-- [Bank & FD Rates Directory](https://yieldnest.online/fd-rates): Filter 25+ scheduled banks, SFBs, and corporate FDs with live certified rates.
+- [Fixed Income Rates Directory](https://yieldnest.online/): Filter 25+ scheduled banks, SFBs, and corporate FDs with live certified rates.
+- [Bank FD Rates Directory](https://yieldnest.online/fd-rates): Dedicated rate tables for Public Sector, Private, and Small Finance Banks.
 - [FD ROI & Tax Calculator](https://yieldnest.online/calculator): Calculate quarterly compounding growth, TDS deductions, and Section 80TTB ₹50,000 exemptions.
-- [Retirement Cashflow & Monthly Pension Planner](https://yieldnest.online/pension-planner): Plan monthly interest inflows using SCSS, RBI Floating Rate Bonds, and fixed deposits.
 - [Multi-Asset Yield & Risk Comparator](https://yieldnest.online/compare-rates): Side-by-side comparison of risk tiers, credit ratings, DICGC insurance, and net returns.
-- [DICGC Insurance & Section 80TTB Guide](https://yieldnest.online/tax-rules-80ttb): Complete statutory guide on DICGC ₹5 Lakh coverage, Form 15H/15G rules, and Section 80TTB.
+- [Resources Hub (Insights & Guides)](https://yieldnest.online/resources): Knowledge base, statutory tax regulations, DICGC guidelines, and editorial insights.
 - [Senior Citizen Savings Scheme (SCSS) Guide](https://yieldnest.online/senior-citizen-savings-scheme): 8.20% sovereign scheme rules, ₹30 Lakh limits, and quarterly interest schedules.
 - [RBI Floating Rate Bonds Guide](https://yieldnest.online/rbi-floating-rate-bonds): Sovereign floating rate bonds pegged at NSC + 0.35% (8.05% p.a.).
-- [Knowledge Base & Blog](https://yieldnest.online/guide): In-depth editorial analyses, safety reviews, and tax guides.
+- [Retirement Cashflow & Monthly Pension Planner](https://yieldnest.online/pension-planner): Plan monthly interest inflows using SCSS, RBI Floating Rate Bonds, and fixed deposits.
+- [DICGC Insurance & Section 80TTB Guide](https://yieldnest.online/tax-rules-80ttb): Complete statutory guide on DICGC ₹5 Lakh coverage, Form 15H/15G rules, and Section 80TTB.
 
 ## Current Benchmark Rates (Verified 2026)
 - SCSS (Senior Citizen Savings Scheme): 8.20% per annum (Quarterly payout, Govt of India sovereign guarantee, 5-year tenure).
